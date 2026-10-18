@@ -2,6 +2,9 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import FormularioComunidade from "../components/FormularioComunidade";
 import ModalMembros from "../components/ModalMembros";
+import ModalRegras from "../components/ModalRegras";
+import ListaRegras from "../components/ListaRegras";
+import SalaArquivos from "../components/SalaArquivos";
 
 const API_BASE = `http://${window.location.hostname}:3000`;
 
@@ -474,6 +477,32 @@ const Comunidades = () => {
                   <span className="text-[22px] font-bold text-[#1a1a2e]">{sala.icone} {sala.nome}</span>
                 </div>
 
+                {sala.tipo === "arquivos" ? (
+                  <SalaArquivos comId={ativa.id} api={api} apiBase={API_BASE} />
+                ) : (
+                  <div className="mt-2.5">
+                    <h2 className="mb-3 text-[17px] font-bold text-[#333]">💬 Chat</h2>
+                    <div ref={chatRef} className="mt-4 h-[300px] overflow-y-auto rounded-[14px] bg-white p-[15px] shadow-[0_2px_10px_rgba(0,0,0,.07)]">
+                      {mensagens.map((texto, i) => (
+                        <div key={i} className="mb-2.5 w-fit max-w-full rounded-[10px] bg-[#dbe7ff] px-3.5 py-2.5 text-sm md:max-w-[70%]">
+                          {texto}
+                        </div>
+                      ))}
+                    </div>
+                    <div className="mt-4 flex flex-col gap-2.5 md:flex-row">
+                      <input
+                        value={mensagem}
+                        onChange={(e) => setMensagem(e.target.value)}
+                        onKeyDown={(e) => e.key === "Enter" && enviarMensagem()}
+                        placeholder="Digite uma mensagem..."
+                        className="flex-1 rounded-[10px] border border-[#ccc] p-3"
+                      />
+                      <button type="button" onClick={enviarMensagem} className="rounded-[10px] bg-[#1466ff] px-[18px] py-3 text-white">
+                        Enviar
+                      </button>
+                    </div>
+                  </div>
+                )}
               </div>
             )}
           </div>
@@ -523,6 +552,14 @@ const Comunidades = () => {
         />
       )}
 
+      {pendente && (
+        <ModalRegras
+          nome={pendente.nome}
+          regras={regrasDe(pendente)}
+          onVoltar={() => setPendente(null)}
+          onAceitar={aceitarRegras}
+        />
+      )}
     </div>
   );
 }
