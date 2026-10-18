@@ -122,6 +122,14 @@ const HeaderPagina = ({ notificacoes, marcarTodasComoLidas }) => {
                     </Link>
 
                     <Link
+                        to="/comunidades"
+                        className={pathname === "/comunidades" ? "ativo" : ""}
+                        onClick={() => setMenuAberto(false)}
+                    >
+                        Comunidades
+                    </Link>
+
+                    <Link
                         to="/camera"
                         className={pathname === "/camera" ? "ativo" : ""}
                         onClick={() => setMenuAberto(false)}

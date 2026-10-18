@@ -10,6 +10,7 @@ import UltimosArquivos from "./components/UltimosArquivos";
 import Footer from "./components/Footer";
 import Materias from "./pages/Materias";
 import PaginaMateria from "./pages/PaginaMateria";
+import Comunidades from "./pages/Comunidades"
 import Calendario from "./pages/Calendario";
 import Camera from "./pages/Camera";
 import Perfil from "./pages/Perfil";
@@ -138,6 +139,16 @@ const App = () => {
             <HeaderPagina notificacoes={notificacoes} marcarTodasComoLidas={marcarTodasComoLidas} />
             <div className="area-principal">
               <main className="conteudo"><Calendario /></main>
+              <Footer />
+            </div>
+          </>
+        } />
+
+        <Route path="/comunidades" element={
+          <>
+            <HeaderPagina notificacoes={notificacoes} marcarTodasComoLidas={marcarTodasComoLidas} />
+            <div className="area-principal">
+              <main className="conteudo"><Comunidades /></main>
               <Footer />
             </div>
           </>

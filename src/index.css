@@ -1,3 +1,5 @@
+@import "tailwindcss";
+
 :root {
   --bg-color1: #000fb0;
   --bg-color2: #ffffff;
@@ -16,12 +18,7 @@
   --raio: 18px;
 }
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: "Manrope", Arial, sans-serif;
-}
+
 
 body {
   background-color: var(--bg-colorFundo);

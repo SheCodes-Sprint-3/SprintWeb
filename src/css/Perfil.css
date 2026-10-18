@@ -13,12 +13,7 @@
   --raio: 18px;
 }
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: "Manrope", Arial, sans-serif;
-}
+
 
 body {
   background-color: var(--bg-colorFundo);
