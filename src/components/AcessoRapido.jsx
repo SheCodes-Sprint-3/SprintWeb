@@ -3,17 +3,17 @@ import { Link } from "react-router-dom"
 const AcessoRapido = ({itens}) => {
   return (
     <>
-      <div className="secao-header">
-        <h2 className="titulo-secao">Acesso rápido</h2>
-        <Link to="/materias" className="ver-todos">
+      <div className="flex items-baseline justify-between">
+        <h2 className="mb-3">Acesso rápido</h2>
+        <Link to="/materias" className="mt-3 inline-block text-[13px] font-bold text-[#000fb0]">
           Ver todos
         </Link>
       </div>
 
-      <div className="acesso-rapido">
+      <div className="grid grid-cols-4 gap-3">
         {itens.map((item) => (
-          <Link to={item.link} className="acesso-item" key={item.id}>
-            <span className={`acesso-icone ${item.cor}`}>{item.icone}</span>
+          <Link to={item.link} className="flex flex-col items-center gap-2 rounded-2xl bg-white px-2 py-4 text-[12.5px] font-bold text-[#333] shadow-[var(--sombra)] transition-transform duration-200 ease-in-out hover:-translate-y-[3px]" key={item.id}>
+            <span className={`flex h-[42px] w-[42px] items-center justify-center rounded-xl text-[20px] ${item.cor}`}>{item.icone}</span>
             <span>{item.label}</span>
           </Link>
         ))}
