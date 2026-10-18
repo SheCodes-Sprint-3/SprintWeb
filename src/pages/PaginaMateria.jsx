@@ -243,7 +243,7 @@ const PaginaMateria = () => {
 
   return (
     <>
-      <main className="materias">
+      <main className="mx-auto w-full max-w-7xl px-5 py-6">
 
         <HeaderMateria
           nomeMateria={nomeMateria}
