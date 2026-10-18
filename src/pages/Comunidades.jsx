@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import FormularioComunidade from "../components/FormularioComunidade";
+import ModalMembros from "../components/ModalMembros";
 
 const API_BASE = `http://${window.location.hostname}:3000`;
 
@@ -511,7 +512,17 @@ const Comunidades = () => {
         />
       )}
 
-      
+      {membrosAberto && comMembros && (
+        <ModalMembros
+          comunidade={comMembros}
+          api={api}
+          criador={ehCriador(comMembros, usuario)}
+          admin={ehAdmin(comMembros, usuario)}
+          onFechar={() => setMembrosAberto(false)}
+          onAlterou={carregarComunidades}
+        />
+      )}
+
     </div>
   );
 }
