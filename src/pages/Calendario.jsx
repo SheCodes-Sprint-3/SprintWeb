@@ -1,6 +1,5 @@
-import React, { useState, useMemo } from "react";
+import { useState, useMemo } from "react";
 import {ChevronLeft, ChevronRight, Plus, X, BookOpen, CalendarDays, Trash2, CheckCircle2, Home, Camera, ClipboardList, User,} from "lucide-react";
-import "../css/Calendario.css";
 
 const MESES = [
   "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
@@ -10,9 +9,9 @@ const MESES = [
 const DIAS_SEMANA = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"];
 const CATEGORIAS = ["Projeto", "Tutoria", "Prova", "Outros"];
 const PRIORIDADES = {
-  alta: { rotulo: "Alta" },
-  media: { rotulo: "Média" },
-  baixa: { rotulo: "Baixa" },
+  alta: { rotulo: "Alta", borda: "border-l-[#e53935]", selo: "bg-[#fde8e8] text-[#c62828]" },
+  media: { rotulo: "Média", borda: "border-l-[#fb8c00]", selo: "bg-[#fff3e0] text-[#e65100]" },
+  baixa: { rotulo: "Baixa", borda: "border-l-[#43a047]", selo: "bg-[#e8f5e9] text-[#2e7d32]" },
 };
 
 function mesmoDia(data, ano, mes, dia) {
@@ -30,12 +29,12 @@ function formatarData(dataStr) {
 function JanelaModal({ aberta, aoFechar, titulo, children }) {
   if (!aberta) return null;
   return (
-    <div className="sobreposicao-modal" onClick={aoFechar}>
-      <div className="caixa-modal" onClick={(e) => e.stopPropagation()}>
-        <button onClick={aoFechar} className="botao-fechar-modal">
+    <div className="fixed inset-0 bg-[rgba(10,12,40,0.45)] z-[1000] flex items-center justify-center p-4" onClick={aoFechar}>
+      <div className="shadow-[0_10px_30px_rgba(0,15,176,0.25)] bg-white rounded-2xl w-full max-w-sm p-5 relative" onClick={(e) => e.stopPropagation()}>
+        <button onClick={aoFechar} className="bg-[#1466ff] absolute top-3 right-3 w-7 h-7 rounded-lg border-none flex items-center justify-center text-white cursor-pointer">
           <X size={14} />
         </button>
-        <h2 className="titulo-modal">{titulo}</h2>
+        <h2 className="text-[#12142b] text-lg font-bold m-0 mb-4 pr-8">{titulo}</h2>
         {children}
       </div>
     </div>
@@ -44,8 +43,8 @@ function JanelaModal({ aberta, aoFechar, titulo, children }) {
 
 function CampoFormulario({ rotulo, children }) {
   return (
-    <label className="campo-formulario">
-      <span className="rotulo-campo">{rotulo}</span>
+    <label className="flex flex-col gap-1 mb-3">
+      <span className="text-[#333] text-xs font-semibold">{rotulo}</span>
       {children}
     </label>
   );
@@ -175,42 +174,42 @@ export default function CalendarioJoviClass() {
   const tarefasOrdenadas = [...tarefas].sort((a, b) => a.concluida - b.concluida);
 
   return (
-    <div className="calendario-container">
+    <div className="bg-[#f0f0f5] min-h-full font-[Manrope,Arial,sans-serif]">
       {}
-      <div className="barra-navegacao">
-        <div className="faixa-cabecalho-calendario">
-          <h1 className="titulo-pagina">Calendário</h1>
-          <p className="subtitulo-pagina">Organize seus eventos, provas e entregas</p>
+      <div className="bg-gradient-to-br from-[#0015d6] to-[#000fb0] text-white w-full -mt-[25px]">
+        <div className="bg-gradient-to-br from-[#000fb0] to-[#1466ff] pt-6 px-6 pb-7 sm:px-8">
+          <h1 className="text-2xl font-extrabold tracking-[-0.02em] m-0 sm:text-[30px]">Calendário</h1>
+          <p className="text-sm opacity-80 mt-1 mb-0">Organize seus eventos, provas e entregas</p>
         </div>
       </div>
 
-      <div className="conteudo-principal">
-        <div className="cartao">
-          <div className="cabecalho-mes">
-            <button onClick={() => mudarMes(-1)} className="botao-mudar-mes">
-              <ChevronLeft size={26} className="icone-azul-escuro" />
+      <div className="max-w-3xl mx-auto px-4 pb-28 sm:px-6">
+        <div className="bg-white rounded-2xl mt-4 p-4 sm:p-6">
+          <div className="flex items-center justify-between mb-5">
+            <button onClick={() => mudarMes(-1)} className="p-1 bg-transparent border-none cursor-pointer flex">
+              <ChevronLeft size={26} className="text-[#000fb0]" />
             </button>
-            <div className="titulo-mes">
+            <div className="text-[#12142b] font-bold text-lg sm:text-2xl">
               {MESES[mes]} {ano}
             </div>
-            <button onClick={() => mudarMes(1)} className="botao-mudar-mes">
-              <ChevronRight size={26} className="icone-azul-escuro" />
+            <button onClick={() => mudarMes(1)} className="p-1 bg-transparent border-none cursor-pointer flex">
+              <ChevronRight size={26} className="text-[#000fb0]" />
             </button>
           </div>
 
-          <div className="grade-dias-semana">
+          <div className="grid grid-cols-7 gap-1.5 sm:gap-2 mb-2">
             {DIAS_SEMANA.map((d) => (
-              <span key={d} className="rotulo-dia-semana">
+              <span key={d} className="text-[#12142b] flex items-center justify-center h-8 font-bold text-[11px] sm:h-10 sm:text-sm">
                 {d}
               </span>
             ))}
           </div>
 
-          <div className="grade-dias-mes">
+          <div className="grid grid-cols-7 gap-1.5 sm:gap-2">
             {grade.map((celula, idx) => {
               if (celula.tipo === "esmaecido") {
                 return (
-                  <div key={idx} className="dia-esmaecido">
+                  <div key={idx} className="bg-[#ececec] text-[#999] flex items-center justify-center h-11 rounded-lg text-xs sm:h-[90px] sm:text-sm">
                     {celula.numero}
                   </div>
                 );
@@ -222,10 +221,18 @@ export default function CalendarioJoviClass() {
                 <div
                   key={idx}
                   onClick={() => abrirDia(dia)}
-                  className={ehHoje ? "celula-dia-hoje" : "celula-dia"}
+                  className={`relative flex flex-col items-start justify-start p-1.5 h-11 rounded-lg cursor-pointer text-[11px] font-medium sm:h-[90px] sm:text-sm ${
+                    ehHoje ? "bg-[#000fb0] text-white" : "bg-[#f0f0f5] text-[#12142b]"
+                  }`}
                 >
-                  <span className="numero-dia">{dia}</span>
-                  {totalDoDia > 0 && <span className={ehHoje ? "ponto-dia-hoje" : "ponto-dia"} />}
+                  <span className="font-bold">{dia}</span>
+                  {totalDoDia > 0 && (
+                    <span
+                      className={`absolute bottom-1.5 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full ${
+                        ehHoje ? "bg-white" : "bg-[#1466ff]"
+                      }`}
+                    />
+                  )}
                 </div>
               );
             })}
@@ -233,34 +240,34 @@ export default function CalendarioJoviClass() {
         </div>
 
     
-        <div className="cartao">
-          <div className="cabecalho-secao">
-            <h2 className="titulo-secao">
-              <CalendarDays size={18} className="icone-azul-escuro" />
+        <div className="bg-white rounded-2xl mt-4 p-4 sm:p-6">
+          <div className="flex items-center justify-between mb-4 flex-wrap gap-3">
+            <h2 className="text-[#111] text-base font-bold flex items-center gap-2 m-0 sm:text-lg">
+              <CalendarDays size={18} className="text-[#000fb0]" />
               Próximas Entregas
             </h2>
-            <button onClick={() => setModalEntregaAberto(true)} className="botao-primario">
+            <button onClick={() => setModalEntregaAberto(true)} className="bg-[#1466ff] text-white text-[13px] font-semibold py-2 px-3.5 rounded-lg border-none flex items-center gap-1 cursor-pointer sm:text-sm">
               <Plus size={14} /> Nova entrega
             </button>
           </div>
 
           {entregas.length === 0 ? (
-            <p className="texto-vazio">Nenhuma entrega cadastrada. Clique em "Nova entrega" para adicionar.</p>
+            <p className="text-[#999] text-center text-sm py-6">Nenhuma entrega cadastrada. Clique em "Nova entrega" para adicionar.</p>
           ) : (
-            <div className="lista-entregas">
+            <div className="flex flex-col gap-2.5">
               {entregas.map((en) => {
                 const p = PRIORIDADES[en.prioridade];
                 return (
-                  <div key={en.id} className={`item-entrega ${en.prioridade}`}>
-                    <div className="info-entrega">
-                      <span className="titulo-entrega">{en.titulo}</span>
-                      <span className="meta-entrega">
+                  <div key={en.id} className={`bg-[#f0f0f5] border-l-4 ${p.borda} flex items-center justify-between gap-3 rounded-lg py-3 px-4 flex-wrap`}>
+                    <div className="flex flex-col gap-1 flex-1 min-w-[140px]">
+                      <span className="text-[#111] font-bold text-sm">{en.titulo}</span>
+                      <span className="text-[#666] text-xs flex gap-3 flex-wrap">
                         {en.materia && <span>📚 {en.materia}</span>}
                         {en.data && <span>📅 {formatarData(en.data)}</span>}
                       </span>
                     </div>
-                    <span className={`selo-prioridade ${en.prioridade}`}>{p.rotulo}</span>
-                    <button onClick={() => removerEntrega(en.id)} className="botao-excluir">
+                    <span className={`${p.selo} text-[11px] font-bold py-0.5 px-2.5 rounded-full uppercase tracking-[0.04em]`}>{p.rotulo}</span>
+                    <button onClick={() => removerEntrega(en.id)} className="text-[#bbb] bg-transparent border-none p-1 cursor-pointer flex hover:text-[#dc2626]">
                       <Trash2 size={16} />
                     </button>
                   </div>
@@ -270,43 +277,43 @@ export default function CalendarioJoviClass() {
           )}
         </div>
 
-        <div className="cartao cartao-checklist">
-          <div className="cabecalho-secao">
-            <h2 className="titulo-secao">
-              <CheckCircle2 size={18} className="icone-azul-escuro" />
+        <div className="bg-white rounded-2xl mt-4 p-4 sm:p-6 mb-6">
+          <div className="flex items-center justify-between mb-4 flex-wrap gap-3">
+            <h2 className="text-[#111] text-base font-bold flex items-center gap-2 m-0 sm:text-lg">
+              <CheckCircle2 size={18} className="text-[#000fb0]" />
               Checklist de Entregas
             </h2>
-            <button onClick={() => setModalTarefaAberto(true)} className="botao-primario">
+            <button onClick={() => setModalTarefaAberto(true)} className="bg-[#1466ff] text-white text-[13px] font-semibold py-2 px-3.5 rounded-lg border-none flex items-center gap-1 cursor-pointer sm:text-sm">
               <Plus size={14} /> Nova tarefa
             </button>
           </div>
 
-          <div className="bloco-progresso">
-            <div className="rotulo-progresso">
+          <div className="mb-4">
+            <div className="text-[#666] text-xs font-semibold mb-2">
               {tarefasConcluidas} de {totalTarefas} concluídas
             </div>
-            <div className="trilha-progresso">
-              <div style={{ width: `${progresso}%` }} className="preenchimento-progresso" />
+            <div className="bg-[#e0e0e0] h-2 rounded-full overflow-hidden">
+              <div style={{ width: `${progresso}%` }} className="bg-gradient-to-r from-[#000fb0] to-[#1466ff] h-full rounded-full transition-[width] duration-300 ease-in-out" />
             </div>
           </div>
 
           {tarefas.length === 0 ? (
-            <p className="texto-vazio">Nenhuma tarefa adicionada. Clique em "+ Nova tarefa" para começar.</p>
+            <p className="text-[#999] text-center text-sm py-6">Nenhuma tarefa adicionada. Clique em "+ Nova tarefa" para começar.</p>
           ) : (
-            <ul className="lista-tarefas">
+            <ul className="list-none flex flex-col gap-2 m-0 p-0">
               {tarefasOrdenadas.map((t) => (
-                <li key={t.id} className={t.concluida ? "item-tarefa-concluida" : "item-tarefa"}>
+                <li key={t.id} className={`bg-[#f0f0f5] flex items-center gap-3 rounded-lg py-3 px-4 ${t.concluida ? "opacity-[0.55]" : ""}`}>
                   <input
                     type="checkbox"
                     checked={t.concluida}
                     onChange={() => alternarTarefa(t.id)}
-                    className="caixa-selecao"
+                    className="accent-[#1466ff] w-5 h-5 shrink-0 cursor-pointer"
                   />
-                  <div className="info-tarefa">
-                    <span className={t.concluida ? "texto-tarefa-concluida" : "texto-tarefa"}>{t.texto}</span>
-                    {t.materia && <span className="materia-tarefa">{t.materia}</span>}
+                  <div className="flex-1 flex flex-col gap-0.5">
+                    <span className={`text-[#111] text-sm font-semibold ${t.concluida ? "line-through" : ""}`}>{t.texto}</span>
+                    {t.materia && <span className="text-[#888] text-xs">{t.materia}</span>}
                   </div>
-                  <button onClick={() => removerTarefa(t.id)} className="botao-excluir">
+                  <button onClick={() => removerTarefa(t.id)} className="text-[#bbb] bg-transparent border-none p-1 cursor-pointer flex hover:text-[#dc2626]">
                     <Trash2 size={16} />
                   </button>
                 </li>
@@ -325,15 +332,15 @@ export default function CalendarioJoviClass() {
             ];
             if (doDia.length === 0) return null;
             return (
-              <div className="lista-eventos-dia">
-                <span className="rotulo-eventos-dia">Eventos do dia</span>
+              <div className="flex flex-col gap-2 max-h-40 overflow-y-auto mb-3">
+                <span className="text-[#000fb0] text-[11px] font-extrabold uppercase tracking-[0.04em]">Eventos do dia</span>
                 {doDia.map((ev, i) => (
-                  <div key={i} className="caixa-evento-dia">
-                    <div className="titulo-evento-dia">
-                      <span className="ponto-evento-dia" />
+                  <div key={i} className="bg-[#eef0ff] border border-[#e0e4ff] rounded-lg py-2 px-3">
+                    <div className="text-[#12142b] flex items-center gap-2 text-sm">
+                      <span className="bg-[#1466ff] w-2 h-2 rounded-full shrink-0" />
                       <strong>{ev.titulo}</strong>
                     </div>
-                    <span className="meta-evento-dia">
+                    <span className="text-[#888888] text-xs ml-4">
                       {ev.origem === "entrega" ? `Entrega · ${formatarData(ev.data)}` : ev.categoria}
                     </span>
                   </div>
@@ -344,7 +351,7 @@ export default function CalendarioJoviClass() {
 
         <CampoFormulario rotulo="Título:">
           <input
-            className="campo-entrada"
+            className="border border-[#ccc] rounded-lg py-[9px] px-2.5 text-sm outline-none w-full font-[inherit]"
             placeholder="Ex. Trabalho de matemática"
             value={formEvento.titulo}
             onChange={(e) => setFormEvento((f) => ({ ...f, titulo: e.target.value }))}
@@ -352,7 +359,7 @@ export default function CalendarioJoviClass() {
         </CampoFormulario>
         <CampoFormulario rotulo="Categoria:">
           <select
-            className="campo-entrada"
+            className="border border-[#ccc] rounded-lg py-[9px] px-2.5 text-sm outline-none w-full font-[inherit]"
             value={formEvento.categoria}
             onChange={(e) => setFormEvento((f) => ({ ...f, categoria: e.target.value }))}
           >
@@ -365,13 +372,13 @@ export default function CalendarioJoviClass() {
         </CampoFormulario>
         <CampoFormulario rotulo="Descrição:">
           <textarea
-            className="campo-entrada campo-textarea"
+            className="border border-[#ccc] rounded-lg py-[9px] px-2.5 text-sm outline-none w-full font-[inherit] resize-none h-20"
             placeholder="Descreva o evento..."
             value={formEvento.descricao}
             onChange={(e) => setFormEvento((f) => ({ ...f, descricao: e.target.value }))}
           />
         </CampoFormulario>
-        <button onClick={salvarEvento} className="botao-primario botao-primario-modal">
+        <button onClick={salvarEvento} className="bg-[#1466ff] text-white text-[13px] sm:text-sm border-none flex items-center gap-1 cursor-pointer w-full font-semibold p-2.5 rounded-lg mt-1">
           Salvar Evento
         </button>
       </JanelaModal>
@@ -379,7 +386,7 @@ export default function CalendarioJoviClass() {
       <JanelaModal aberta={modalEntregaAberto} aoFechar={() => setModalEntregaAberto(false)} titulo="Nova Entrega">
         <CampoFormulario rotulo="Título:">
           <input
-            className="campo-entrada"
+            className="border border-[#ccc] rounded-lg py-[9px] px-2.5 text-sm outline-none w-full font-[inherit]"
             placeholder="Ex. Relatório de Biologia"
             value={formEntrega.titulo}
             onChange={(e) => setFormEntrega((f) => ({ ...f, titulo: e.target.value }))}
@@ -387,7 +394,7 @@ export default function CalendarioJoviClass() {
         </CampoFormulario>
         <CampoFormulario rotulo="Matéria:">
           <input
-            className="campo-entrada"
+            className="border border-[#ccc] rounded-lg py-[9px] px-2.5 text-sm outline-none w-full font-[inherit]"
             placeholder="Ex. Biologia"
             value={formEntrega.materia}
             onChange={(e) => setFormEntrega((f) => ({ ...f, materia: e.target.value }))}
@@ -396,14 +403,14 @@ export default function CalendarioJoviClass() {
         <CampoFormulario rotulo="Data de entrega:">
           <input
             type="date"
-            className="campo-entrada"
+            className="border border-[#ccc] rounded-lg py-[9px] px-2.5 text-sm outline-none w-full font-[inherit]"
             value={formEntrega.data}
             onChange={(e) => setFormEntrega((f) => ({ ...f, data: e.target.value }))}
           />
         </CampoFormulario>
         <CampoFormulario rotulo="Prioridade:">
           <select
-            className="campo-entrada"
+            className="border border-[#ccc] rounded-lg py-[9px] px-2.5 text-sm outline-none w-full font-[inherit]"
             value={formEntrega.prioridade}
             onChange={(e) => setFormEntrega((f) => ({ ...f, prioridade: e.target.value }))}
           >
@@ -412,7 +419,7 @@ export default function CalendarioJoviClass() {
             <option value="baixa">Baixa</option>
           </select>
         </CampoFormulario>
-        <button onClick={salvarEntrega} className="botao-primario botao-primario-modal">
+        <button onClick={salvarEntrega} className="bg-[#1466ff] text-white text-[13px] sm:text-sm border-none flex items-center gap-1 cursor-pointer w-full font-semibold p-2.5 rounded-lg mt-1">
           Salvar Entrega
         </button>
       </JanelaModal>
@@ -420,7 +427,7 @@ export default function CalendarioJoviClass() {
       <JanelaModal aberta={modalTarefaAberto} aoFechar={() => setModalTarefaAberto(false)} titulo="Nova Tarefa">
         <CampoFormulario rotulo="Tarefa:">
           <input
-            className="campo-entrada"
+            className="border border-[#ccc] rounded-lg py-[9px] px-2.5 text-sm outline-none w-full font-[inherit]"
             placeholder="Ex. Estudar capítulo 3"
             value={formTarefa.texto}
             onChange={(e) => setFormTarefa((f) => ({ ...f, texto: e.target.value }))}
@@ -428,13 +435,13 @@ export default function CalendarioJoviClass() {
         </CampoFormulario>
         <CampoFormulario rotulo="Matéria:">
           <input
-            className="campo-entrada"
+            className="border border-[#ccc] rounded-lg py-[9px] px-2.5 text-sm outline-none w-full font-[inherit]"
             placeholder="Ex. Matemática"
             value={formTarefa.materia}
             onChange={(e) => setFormTarefa((f) => ({ ...f, materia: e.target.value }))}
           />
         </CampoFormulario>
-        <button onClick={salvarTarefa} className="botao-primario botao-primario-modal">
+        <button onClick={salvarTarefa} className="bg-[#1466ff] text-white text-[13px] sm:text-sm border-none flex items-center gap-1 cursor-pointer w-full font-semibold p-2.5 rounded-lg mt-1">
           Adicionar Tarefa
         </button>
       </JanelaModal>
