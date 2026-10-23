@@ -5,7 +5,6 @@ import CameraDropdown from "../components/CameraDropdown";
 import CameraZoom from "../components/CameraZoom";
 import CameraControls from "../components/CameraControls";
 import CameraOverlay from "../components/CameraOverlay";
-import "../css/Camera.css";
 
 const Camera = () => {
   const videoRef = useRef(null);
@@ -99,26 +98,29 @@ const Camera = () => {
   };
 
   return (
-    <div className="camera-page">
-      <div className="phone-wrapper">
+    <div className="w-full h-screen bg-black text-white flex justify-center items-stretch">
+      <div className="w-full max-w-[430px] h-full mx-auto flex flex-col bg-black overflow-hidden">
         <CameraHeader onLogoClick={abrirDropdown} />
 
-        <div className="camera-viewport">
+        <div className="relative w-full flex-1 bg-black overflow-hidden min-h-0">
           <CameraDropdown aberto={dropdownAberto} onSelecionarMateria={selecionarMateria} />
 
-          <video ref={videoRef} autoPlay playsInline muted className="camera-video" />
-          <canvas ref={canvasRef} className="camera-canvas" />
+          <video ref={videoRef} autoPlay playsInline muted className="w-full h-full object-cover block" />
+          <canvas ref={canvasRef} className="hidden" />
 
           <CameraZoom />
 
           {(resultado || cameraErro) && (
-            <div className="camera-resultado">
+            <div className="absolute bottom-[70px] left-4 right-4 max-h-[35%] overflow-y-auto bg-[rgba(0,0,0,0.72)] backdrop-blur-[8px] p-4 rounded-[14px] text-[0.9rem] leading-normal whitespace-pre-wrap z-20">
               {cameraErro || resultado}
             </div>
           )}
 
           {materiaSelecionada && (
-            <button className="confirm-btn" onClick={abrirOverlay}>
+            <button
+              className="absolute bottom-[70px] right-6 w-[52px] h-[52px] border-none rounded-full bg-[#00c853] text-white text-[1.3rem] cursor-pointer z-[90] flex items-center justify-center shadow-[0_8px_20px_rgba(0,200,83,0.4)] transition-transform duration-200 hover:scale-[1.08] active:scale-95"
+              onClick={abrirOverlay}
+            >
               ✔
             </button>
           )}
