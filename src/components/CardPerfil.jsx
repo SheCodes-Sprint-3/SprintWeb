@@ -2,7 +2,7 @@ import { useRef } from "react";
 import logoGoogle from "../assets/google-logo.png";
 import logoNotion from "../assets/Notion-Logo.png";
 
-const CardPerfil = ({nome, curso, email, foto, mudarFoto, editarPerfil}) => {
+const CardPerfil = ({ nome, curso, email, foto, mudarFoto, editarPerfil }) => {
   const inputFotoRef = useRef(null);
 
   const trocarFoto = () => {
@@ -19,13 +19,23 @@ const CardPerfil = ({nome, curso, email, foto, mudarFoto, editarPerfil}) => {
   };
 
   return (
-    <section className="perfil-hero">
-      <div className="perfil-avatar-bloco">
-        <div className="perfil-avatar">
-          <img src={foto} alt={`Foto de perfil de ${nome}`}/>
+    <section className="flex flex-wrap items-center justify-between gap-[18px] rounded-[22px] bg-[linear-gradient(135deg,var(--grad-inicio),var(--bg-color4)_120%)] p-6 text-white shadow-[var(--sombra-forte)]">
+      <div className="flex items-center gap-4">
+        <div className="relative h-[76px] w-[76px] shrink-0">
+          <img
+            src={foto}
+            alt={`Foto de perfil de ${nome}`}
+            className="h-full w-full rounded-full border-[3px] border-white/70 object-cover"
+          />
 
-          <button className="perfil-avatar-editar" type="button" onClick={trocarFoto} aria-label="Trocar foto">
+          <button
+            className="absolute -bottom-0.5 -right-0.5 flex h-[26px] w-[26px] items-center justify-center rounded-full border-2 border-white bg-[#34d399] text-[#043b2a] cursor-pointer"
+            type="button"
+            onClick={trocarFoto}
+            aria-label="Trocar foto"
+          >
             <svg
+              className="h-[13px] w-[13px]"
               viewBox="0 0 24 24"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
@@ -39,33 +49,57 @@ const CardPerfil = ({nome, curso, email, foto, mudarFoto, editarPerfil}) => {
             </svg>
           </button>
 
-          <input ref={inputFotoRef} type="file" accept="image/*" hidden onChange={handleFoto}/>
-
+          <input
+            ref={inputFotoRef}
+            type="file"
+            accept="image/*"
+            hidden
+            onChange={handleFoto}
+          />
         </div>
 
-        <div className="perfil-identidade">
-          <h2>{nome}</h2>
-
-          <span className="perfil-curso">{curso}</span>
-          <span className="perfil-email">{email}</span>
+        <div>
+          <h2 className="text-[1.2rem] font-extrabold">{nome}</h2>
+          <span className="block text-[12.5px] opacity-90">{curso}</span>
+          <span className="block text-[12.5px] opacity-90">{email}</span>
         </div>
       </div>
 
-      <div className="perfil-acoes">
-
-        <button className="btn-editar-perfil" type="button" onClick={editarPerfil}>
+      <div className="flex flex-wrap items-center gap-[14px]">
+        <button
+          className="rounded-xl border border-white/40 bg-white/[0.18] px-[18px] py-[10px] text-[13px] font-bold text-white backdrop-blur-md transition-colors duration-200 hover:bg-white/[0.28] cursor-pointer"
+          type="button"
+          onClick={editarPerfil}
+        >
           Editar perfil
         </button>
 
-        <div className="conexoes-externas">
-
-          <button className="btn-conexaoG" type="button" title="Conectar Google" aria-label="Conectar Google">
-            <img src={logoGoogle} alt="Google"/>
+        <div className="flex items-center gap-2">
+          <button
+            className="flex h-[38px] w-[38px] shrink-0 items-center justify-center rounded-full bg-white/[0.92] p-0 transition-[transform,box-shadow] duration-200 cursor-pointer"
+            type="button"
+            title="Conectar Google"
+            aria-label="Conectar Google"
+          >
+            <img
+              src={logoGoogle}
+              alt="Google"
+              className="h-[30px] w-[30px] object-contain"
+            />
           </button>
-          <button className="btn-conexaoN" type="button" title="Conectar Notion" aria-label="Conectar Notion">
-            <img src={logoNotion} alt="Notion"/>
-          </button>
 
+          <button
+            className="flex h-[38px] w-[38px] shrink-0 items-center justify-center rounded-full bg-white/[0.92] p-0 transition-[transform,box-shadow] duration-200 cursor-pointer"
+            type="button"
+            title="Conectar Notion"
+            aria-label="Conectar Notion"
+          >
+            <img
+              src={logoNotion}
+              alt="Notion"
+              className="h-[80px] w-[80px] object-contain"
+            />
+          </button>
         </div>
       </div>
     </section>
