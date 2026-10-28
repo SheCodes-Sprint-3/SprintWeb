@@ -19,16 +19,18 @@ const notificacoesIniciais = [
 
 function Layout({ children, notificacoes, marcarTodasComoLidas }) {
   return (
-    <>
+    <div className="flex min-h-screen flex-col min-[900px]:flex-row">
       <HeaderPagina
         notificacoes={notificacoes}
         marcarTodasComoLidas={marcarTodasComoLidas}
       />
-      <div className="area-principal">
-        {children}
+      <div className="flex min-w-0 flex-1 flex-col">
+        <main className="w-full flex-1">
+          {children}
+        </main>
         <Footer />
       </div>
-    </>
+    </div>
   );
 }
 
@@ -53,12 +55,12 @@ const App = () => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={pagina(<main className="conteudo"><Home /></main>)} />
-        <Route path="/materias" element={pagina(<main className="conteudo"><Materias /></main>)} />
-        <Route path="/materias/:id" element={pagina(<main className="conteudo"><PaginaMateria /></main>)} />
-        <Route path="/calendario" element={pagina(<main className="conteudo"><Calendario /></main>)} />
-        <Route path="/comunidades" element={pagina(<main className="conteudo"><Comunidades /></main>)} />
-        <Route path="/perfil" element={pagina(<main className="conteudo"><Perfil /></main>)} />
+        <Route path="/" element={pagina(<Home />)} />
+        <Route path="/materias" element={pagina(<Materias />)} />
+        <Route path="/materias/:id" element={pagina(<PaginaMateria />)} />
+        <Route path="/calendario" element={pagina(<Calendario />)} />
+        <Route path="/comunidades" element={pagina(<Comunidades />)} />
+        <Route path="/perfil" element={pagina(<Perfil />)} />
         <Route path="/camera" element={<Camera />} />
       </Routes>
     </BrowserRouter>

@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import AcessoRapido from "../components/AcessoRapido";
@@ -37,12 +36,14 @@ const Home = () => {
     }
 
     return (
-        <main className="conteudo">
-            <div className="saudacao">
-                <div>
-                    <h1>Olá, Helena!</h1>
-                    <p>Vamos continuar seus estudos?</p>
-                </div>
+        <main className="mx-auto w-full max-w-[1100px] flex-1 px-[18px] py-[22px] pb-10 min-[900px]:px-11 min-[900px]:py-10">
+            <div className="mb-5">
+                <h1 className="mb-0.5 text-[1.7rem] font-extrabold text-[#12142b]">
+                    Olá, Helena!
+                </h1>
+                <p className="mb-5 text-sm text-[var(--bg-color5)]">
+                    Vamos continuar seus estudos?
+                </p>
             </div>
 
             <ProgressoCard
@@ -54,8 +55,7 @@ const Home = () => {
 
             <button
                 type="button"
-                className="btn-revisao"
-                style={{ marginTop: 12, border: "none", cursor: "pointer" }}
+                className="mt-3 inline-block cursor-pointer rounded-xl border-0 bg-[var(--bg-color1)] px-[18px] py-[11px] text-[13.5px] font-bold text-white"
                 onClick={() => setOverlayAberto(true)}
             >
                 Marcar tarefa como concluída
@@ -79,7 +79,7 @@ const Home = () => {
                 ]}
             />
 
-            <div className="secoes">
+            <div className="mt-[22px] flex flex-col gap-4 min-[900px]:flex-row">
                 <ProximasProvas
                     provas={[
                         { id: 1, materia: "Cálculo I", icone: "ƒ(x)", cor: "roxo", data: "25/05/2024", progresso: 65, diasRestantes: 10 },
@@ -97,14 +97,18 @@ const Home = () => {
                 />
             </div>
 
-            <section className="sugestao-card">
-                <div className="sugestao-texto">
-                    <span className="sugestao-eyebrow">✦ Sugestão para hoje</span>
-                    <p>
-                        Você tem uma prova de Cálculo em 10 dias. Que tal revisar
-                        derivadas por 30 minutos?
+            <section className="mt-[22px] flex items-center justify-between gap-4 rounded-[var(--raio)] border border-[var(--lilas-borda)] bg-[var(--lilas-suave)] p-[22px]">
+                <div>
+                    <span className="text-[13px] font-extrabold text-[var(--bg-color1)]">
+                        ✦ Sugestão para hoje
+                    </span>
+                    <p className="my-2 mb-[14px] max-w-[40ch] text-sm text-[#444]">
+                        Você tem uma prova de Cálculo em 10 dias. Que tal revisar derivadas por 30 minutos?
                     </p>
-                    <Link to="/materias" className="btn-revisao">
+                    <Link
+                        to="/materias"
+                        className="inline-block rounded-xl bg-[var(--bg-color1)] px-[18px] py-[11px] text-[13.5px] font-bold text-white"
+                    >
                         Começar revisão
                     </Link>
                 </div>
