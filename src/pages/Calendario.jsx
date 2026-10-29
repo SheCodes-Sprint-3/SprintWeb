@@ -149,6 +149,10 @@ export default function CalendarioJoviClass() {
     setModalEventoAberto(false);
   }
 
+  function removerEvento(id) {
+    setEventos((prev) => prev.filter((e) => e.id !== id));
+  }
+
   function salvarEntrega() {
     if (!formEntrega.titulo.trim()) return;
     const id = Date.now();
@@ -354,15 +358,27 @@ export default function CalendarioJoviClass() {
             return (
               <div className="flex flex-col gap-2 max-h-40 overflow-y-auto mb-3">
                 <span className="text-[#000fb0] text-[11px] font-extrabold uppercase tracking-[0.04em]">Eventos do dia</span>
-                {doDia.map((ev, i) => (
-                  <div key={i} className="bg-[#eef0ff] border border-[#e0e4ff] rounded-lg py-2 px-3">
-                    <div className="text-[#12142b] flex items-center gap-2 text-sm">
-                      <span className="bg-[#1466ff] w-2 h-2 rounded-full shrink-0" />
-                      <strong>{ev.titulo}</strong>
+                {doDia.map((ev) => (
+                  <div key={`${ev.origem}-${ev.id}`} className="bg-[#eef0ff] border border-[#e0e4ff] flex items-center justify-between gap-2 rounded-lg py-2 px-3">
+                    <div>
+                      <div className="text-[#12142b] flex items-center gap-2 text-sm">
+                        <span className="bg-[#1466ff] w-2 h-2 rounded-full shrink-0" />
+                        <strong>{ev.titulo}</strong>
+                      </div>
+                      <span className="text-[#888888] text-xs ml-4">
+                        {ev.origem === "entrega" ? `Entrega · ${formatarData(ev.data)}` : ev.categoria}
+                      </span>
                     </div>
-                    <span className="text-[#888888] text-xs ml-4">
-                      {ev.origem === "entrega" ? `Entrega · ${formatarData(ev.data)}` : ev.categoria}
-                    </span>
+                    {ev.origem === "evento" && (
+                      <button
+                        type="button"
+                        onClick={() => removerEvento(ev.id)}
+                        aria-label={`Excluir evento ${ev.titulo}`}
+                        className="text-[#bbb] bg-transparent border-none p-1 cursor-pointer flex shrink-0 hover:text-[#dc2626]"
+                      >
+                        <Trash2 size={16} />
+                      </button>
+                    )}
                   </div>
                 ))}
               </div>
