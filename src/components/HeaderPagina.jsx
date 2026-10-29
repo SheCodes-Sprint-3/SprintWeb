@@ -16,7 +16,7 @@ const HeaderPagina = ({ notificacoes, marcarTodasComoLidas }) => {
         }`;
 
     return (
-        <header className="relative  sticky top-0 z-30 flex flex-col bg-[linear-gradient(135deg,var(--grad-inicio)_0%,var(--grad-fim)_100%)] px-5 py-[18px] text-white shadow-[0_4px_20px_rgba(0,0,0,0.15)] min-[900px]:min-h-screen min-[900px]:w-[280px] min-[900px]:shrink-0 min-[900px]:px-[22px] min-[900px]:py-[30px]">
+        <header className="relative  sticky top-0 z-30 flex flex-col bg-[linear-gradient(135deg,var(--grad-inicio)_0%,var(--grad-fim)_100%)] px-5 py-[18px] text-white shadow-[0_4px_20px_rgba(0,0,0,0.15)] min-[900px]:max-h-screen min-[900px]:min-h-screen min-[900px]:w-[280px] min-[900px]:shrink-0 min-[900px]:self-start min-[900px]:overflow-y-auto min-[900px]:px-[22px] min-[900px]:py-[30px]">
             <div className="flex items-center justify-between min-[900px]:flex-col min-[900px]:gap-[14px]">
                 <div className="flex items-center gap-3 min-[900px]:flex-col">
                     <img

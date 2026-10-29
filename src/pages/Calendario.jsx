@@ -204,7 +204,7 @@ export default function CalendarioJoviClass() {
       { }
       <div className="bg-gradient-to-br from-[#0015d6] to-[#000fb0] text-white w-full -mt-[25px]">
         <div className="bg-gradient-to-br from-[#000fb0] to-[#1466ff] pt-6 px-6 pb-7 sm:px-8">
-          <h1 className="text-2xl font-extrabold tracking-[-0.02em] m-0 sm:text-[30px]">Calendário</h1>
+          <h1 className="text-2xl font-extrabold tracking-[-0.02em] mt-8 m-0 sm:text-[30px]">Calendário</h1>
           <p className="text-sm opacity-80 mt-1 mb-0">Organize seus eventos, provas e entregas</p>
         </div>
       </div>
