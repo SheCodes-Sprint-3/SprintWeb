@@ -193,7 +193,7 @@ const Materia = () => {
     <>
       {ToastEl}
 
-      <main className="w-full min-w-0 p-[30px] max-[899px]:px-4 max-[899px]:pb-[90px] max-[899px]:pt-5">
+      <main className="mx-auto w-full max-w-[1100px] flex-1 px-[18px] pt-[22px] pb-10 min-[900px]:px-11 min-[900px]:pt-10">
         <div className="flex flex-row flex-wrap items-start justify-between gap-[15px] max-[899px]:flex-col max-[899px]:gap-5">
           <div className="flex min-w-0 flex-col">
             <h1 className="mb-1 text-[1.9rem] font-extrabold text-[#12142b]">

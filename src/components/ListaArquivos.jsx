@@ -13,15 +13,16 @@ const ListaArquivos = ({ itens, abrirViewer, abrirDropdown }) => {
   }
 
   return (
-    <section className="w-full">
+    <section className="w-full mt-5">
       <div className="mb-4 flex items-center justify-between gap-4">
         <h2 className="mb-4 text-[21px] font-extrabold tracking-[-0.4px] text-[#101b4d] max-[699px]:text-[19px]">Arquivos e anotações</h2>
       </div>
 
       {itens.length === 0 ? (
+        // mt-6 w-full rounded-[22px] bg-white p-7 shadow-[0 8px 24px rgba(18, 42, 110, .07)] max-[699px]:p-5
         <p className="flex min-h-[260px] items-center justify-center text-[16px] text-[#73798d]">Ainda não há arquivos.</p>
       ) : (
-        <div className="mt-0 flex max-w-[980px] flex-col gap-0 overflow-hidden rounded-[22px] bg-white shadow-[0 8px 24px rgba(18, 42, 110, .07)] max-[699px]:rounded-[18px]">
+        <div className="mt-0 flex w-full flex-col gap-0 overflow-hidden rounded-[22px] bg-white shadow-[0 8px 24px rgba(18, 42, 110, .07)] max-[699px]:rounded-[18px]">
           {itens.map((item) => (
             <div key={item.id} className="flex min-h-[88px] cursor-pointer items-center justify-between border-b border-[#e8eaf2] bg-white px-5 py-[15px] transition-[box-shadow,transform,background] duration-200 hover:bg-[#fcfdff] hover:shadow-[inset_4px_0_0_#145cff] last:border-b-0 max-[699px]:min-h-[80px] max-[699px]:px-3 max-[699px]:py-[13px]" onClick={() => abrirViewer(item)}>
               <div className="flex flex-1 items-center gap-[15px] overflow-hidden max-[699px]:gap-[11px]">
