@@ -6,6 +6,7 @@ import ListaArquivos from "../components/ListaArquivos";
 import FormularioAnotacao from "../components/FormularioAnotacao";
 import DropdownArquivo from "../components/DropdownArquivo";
 import ViewerEdicaoAnotacao from "../components/ViewerEdicaoAnotacao";
+import { useToast } from "../components/useToast";
 import "../css/PaginaMateria.css";
 
 function novoId() {
@@ -26,6 +27,7 @@ function tipoArquivoPorNome(nome) {
 
 const PaginaMateria = () => {
   const { id } = useParams();
+  const { mostrarToast, ToastEl } = useToast();
 
   const [nomeMateria] = useState(() => {
     try {
@@ -52,7 +54,7 @@ const PaginaMateria = () => {
   const [tituloAnotacao, setTituloAnotacao] = useState("");
   const [textoAnotacao, setTextoAnotacao] = useState("");
   const [dropdown, setDropdown] = useState(null);
-  
+
 
   const inputArquivoRef = useRef(null);
 
@@ -126,11 +128,11 @@ const PaginaMateria = () => {
   }
 
   function importarDrive() {
-    alert("Integração com Google Drive ainda não conectada.");
+    mostrarToast("Google Drive ainda não está integrado.");
   }
 
   function importarNotion() {
-    alert("Integração com Notion ainda não conectada.");
+    mostrarToast("Notion ainda não está integrado.");
   }
 
   function abrirDropdown(itemId, btnEl) {
@@ -164,33 +166,33 @@ const PaginaMateria = () => {
 
   const [viewerItem, setViewerItem] = useState(null);
 
-    function abrirViewer(item) {
+  function abrirViewer(item) {
     if (!item) return;
 
     setDropdown(null);
     setViewerItem(item);
-    }
+  }
 
-    function fecharViewer() {
+  function fecharViewer() {
     setViewerItem(null);
-    }
+  }
 
-    function salvarEdicaoViewer(novoTexto) {
+  function salvarEdicaoViewer(novoTexto) {
     if (!viewerItem) return;
 
     setItens((prev) =>
-        prev.map((item) =>
+      prev.map((item) =>
         item.id === viewerItem.id
-            ? { ...item, conteudo: novoTexto }
-            : item
-        )
+          ? { ...item, conteudo: novoTexto }
+          : item
+      )
     );
 
     setViewerItem((item) => ({
-        ...item,
-        conteudo: novoTexto
+      ...item,
+      conteudo: novoTexto
     }));
-    }
+  }
 
   function excluirItem(itemId) {
     setDropdown(null);
@@ -299,6 +301,8 @@ const PaginaMateria = () => {
         onSalvar={salvarEdicaoViewer}
         onBaixar={baixarItem}
       />
+
+      {ToastEl}
     </>
   );
 };
