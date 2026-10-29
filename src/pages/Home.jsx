@@ -16,6 +16,64 @@ const Home = () => {
         }
     });
 
+    const [provas] = useState(() => {
+        try {
+            const eventos = JSON.parse(localStorage.getItem("joviclass:eventos") || "[]");
+            const hoje = new Date();
+            hoje.setHours(0, 0, 0, 0);
+            const cores = ["roxo", "verde", "azul", "laranja"];
+
+            return eventos
+                .filter((e) => e.categoria === "Prova")
+                .map((e) => ({ ...e, dataObj: new Date(e.data) }))
+                .filter((e) => e.dataObj >= hoje)
+                .sort((a, b) => a.dataObj - b.dataObj)
+                .slice(0, 3)
+                .map((e, i) => ({
+                    id: e.id,
+                    materia: e.titulo,
+                    icone: "📝",
+                    cor: cores[i % cores.length],
+                    data: e.dataObj.toLocaleDateString("pt-BR"),
+                    diasRestantes: Math.round((e.dataObj - hoje) / 86400000),
+                }));
+        } catch {
+            return [];
+        }
+    });
+
+    const [ultimosArquivos] = useState(() => {
+        try {
+            const materias = JSON.parse(localStorage.getItem("materias") || "[]");
+            const todos = [];
+
+            materias.forEach((m) => {
+                const itens = JSON.parse(localStorage.getItem(`materia:${m.id}:itens`) || "[]");
+                itens.forEach((item) => todos.push({ ...item, nomeMateria: m.nome }));
+            });
+
+            const icones = { anotacao: "📝", pdf: "📄", imagem: "🖼️" };
+            const cores = { anotacao: "laranja", pdf: "roxo", imagem: "verde" };
+
+            return todos
+                .sort((a, b) => new Date(b.criadoEm) - new Date(a.criadoEm))
+                .slice(0, 3)
+                .map((item) => {
+                    const tipo = item.tipo === "anotacao" ? "anotacao" : item.tipoArquivo;
+                    return {
+                        id: item.id,
+                        nome: item.nome,
+                        materia: item.nomeMateria,
+                        data: new Date(item.criadoEm).toLocaleDateString("pt-BR", { day: "2-digit", month: "2-digit" }),
+                        icone: icones[tipo] || "📁",
+                        cor: cores[tipo] || "azul",
+                    };
+                });
+        } catch {
+            return [];
+        }
+    });
+
     const [tarefas] = useState(() => {
         try {
             return JSON.parse(localStorage.getItem("joviclass:tarefas") || "[]");
@@ -89,21 +147,8 @@ const Home = () => {
             />
 
             <div className="mt-[22px] flex flex-col gap-4 min-[900px]:flex-row">
-                <ProximasProvas
-                    provas={[
-                        { id: 1, materia: "Cálculo I", icone: "ƒ(x)", cor: "roxo", data: "25/05/2024", progresso: 65, diasRestantes: 10 },
-                        { id: 2, materia: "Física II", icone: "⚛️", cor: "verde", data: "02/06/2024", progresso: 40, diasRestantes: 18 },
-                        { id: 3, materia: "Economia", icone: "💹", cor: "azul", data: "10/06/2024", progresso: 20, diasRestantes: 26 },
-                    ]}
-                />
-
-                <UltimosArquivos
-                    arquivos={[
-                        { id: 1, nome: "Funções de 2° grau", materia: "Matemática", data: "20/05", icone: "📄", cor: "laranja" },
-                        { id: 2, nome: "Leis de Newton", materia: "Física", data: "19/05", icone: "📄", cor: "verde" },
-                        { id: 3, nome: "Demanda e Oferta", materia: "Economia", data: "18/05", icone: "📄", cor: "azul" },
-                    ]}
-                />
+                <ProximasProvas provas={provas} />
+                <UltimosArquivos arquivos={ultimosArquivos} />
             </div>
 
             <section className="mt-[22px] flex items-center justify-between gap-4 rounded-[var(--raio)] border border-[var(--lilas-borda)] bg-[var(--lilas-suave)] p-[22px]">

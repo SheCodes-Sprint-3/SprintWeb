@@ -4,7 +4,7 @@ const AcessoRapido = ({itens}) => {
   return (
     <>
       <div className="flex items-baseline justify-between">
-        <h2 className="mb-3">Acesso rápido</h2>
+        <h2 className="mb-3 mt-[22px] text-[1.05rem] font-extrabold text-[#12142b]">Acesso rápido</h2>
         <Link to="/materias" className="mt-3 inline-block text-[13px] font-bold text-[#000fb0]">
           Ver todos
         </Link>

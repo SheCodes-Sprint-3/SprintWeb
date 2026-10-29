@@ -63,9 +63,15 @@ export default function CalendarioJoviClass() {
   const hoje = useMemo(() => new Date(), []);
   const [dataAtual, setDataAtual] = useState(new Date());
 
-  const [eventos, setEventos] = useState([]);
+  const [eventos, setEventos] = useState(() =>
+    lerStorage("joviclass:eventos", []).map((e) => ({ ...e, data: new Date(e.data) }))
+  );
   const [entregas, setEntregas] = useState(() => lerStorage("joviclass:entregas", []));
   const [tarefas, setTarefas] = useState(() => lerStorage("joviclass:tarefas", []));
+
+  useEffect(() => {
+    localStorage.setItem("joviclass:eventos", JSON.stringify(eventos));
+  }, [eventos]);
 
   useEffect(() => {
     localStorage.setItem("joviclass:entregas", JSON.stringify(entregas));

@@ -1,6 +1,15 @@
 
 import { useNavigate } from "react-router-dom";
 
+function contarItens(id) {
+  try {
+    const itens = JSON.parse(localStorage.getItem(`materia:${id}:itens`) || "[]");
+    return itens.length;
+  } catch {
+    return 0;
+  }
+}
+
 const CardsMaterias = ({ materias, abrirDropdown }) => {
   const navigate = useNavigate();
 
@@ -26,6 +35,7 @@ const CardsMaterias = ({ materias, abrirDropdown }) => {
         materias.map((materia) => {
           const cor = materia.cor || "#1466ff";
           const bg = corFundo(cor);
+          const totalArquivos = contarItens(materia.id);
 
           return (
             <div
@@ -62,7 +72,7 @@ const CardsMaterias = ({ materias, abrirDropdown }) => {
 
               <h3 className="mt-[15px] font-bold">{materia.nome}</h3>
               <p className="mt-2 text-sm text-[var(--bg-color5)]">
-                {materia.arquivos || 0} arquivo(s)
+                {totalArquivos} arquivo(s)
               </p>
             </div>
           );

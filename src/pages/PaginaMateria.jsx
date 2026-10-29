@@ -57,6 +57,7 @@ const PaginaMateria = () => {
 
 
   const inputArquivoRef = useRef(null);
+  const formularioRef = useRef(null);
 
   const itensFiltrados = useMemo(() => {
     if (!busca.trim()) return itens;
@@ -79,6 +80,10 @@ const PaginaMateria = () => {
     setTituloAnotacao("");
     setTextoAnotacao("");
     setAnotacaoAberta(true);
+
+    setTimeout(() => {
+      formularioRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 0);
   }
 
   function salvarAnotacao() {
@@ -276,14 +281,16 @@ const PaginaMateria = () => {
         />
 
         {anotacaoAberta && (
-          <FormularioAnotacao
-            tituloAnotacao={tituloAnotacao}
-            textoAnotacao={textoAnotacao}
-            setTituloAnotacao={setTituloAnotacao}
-            setTextoAnotacao={setTextoAnotacao}
-            cancelar={() => setAnotacaoAberta(false)}
-            salvar={salvarAnotacao}
-          />
+          <div ref={formularioRef} className="scroll-mt-24 min-[900px]:scroll-mt-6">
+            <FormularioAnotacao
+              tituloAnotacao={tituloAnotacao}
+              textoAnotacao={textoAnotacao}
+              setTituloAnotacao={setTituloAnotacao}
+              setTextoAnotacao={setTextoAnotacao}
+              cancelar={() => setAnotacaoAberta(false)}
+              salvar={salvarAnotacao}
+            />
+          </div>
         )}
       </main>
 
