@@ -73,8 +73,7 @@ const HeaderPagina = ({ notificacoes, marcarTodasComoLidas }) => {
                         {notifAberto && (
                             <div
                                 id="notifPanel"
-                                className="absolute right-0 top-[calc(100%+12px)] z-[60] w-80 max-w-[86vw] overflow-hidden rounded-2xl bg-white text-[#12142b] shadow-[var(--sombra-forte)]"
-                            >
+                                className="z-[60] overflow-hidden rounded-2xl bg-white text-[#12142b] shadow-[var(--sombra-forte)] max-[899px]:fixed max-[899px]:left-3 max-[899px]:right-3 max-[899px]:top-[84px] min-[900px]:absolute min-[900px]:left-1/2 min-[900px]:top-[calc(100%+12px)] min-[900px]:w-[252px] min-[900px]:-translate-x-1/2"                            >
                                 <div className="flex items-center justify-between gap-2 border-b border-[#eef0f5] px-4 py-[14px]">
                                     <strong className="text-sm">Notificações</strong>
                                     <button
