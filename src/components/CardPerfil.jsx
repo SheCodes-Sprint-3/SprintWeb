@@ -2,7 +2,8 @@ import { useRef } from "react";
 import logoGoogle from "../assets/google-logo.png";
 import logoNotion from "../assets/Notion-Logo.png";
 
-const CardPerfil = ({ nome, curso, email, foto, mudarFoto, editarPerfil }) => {
+
+const CardPerfil = ({ nome, curso, email, foto, mudarFoto, editarPerfil, conectarGoogle, conectarNotion }) => {
   const inputFotoRef = useRef(null);
 
   const trocarFoto = () => {
@@ -80,6 +81,7 @@ const CardPerfil = ({ nome, curso, email, foto, mudarFoto, editarPerfil }) => {
             type="button"
             title="Conectar Google"
             aria-label="Conectar Google"
+            onClick={conectarGoogle}
           >
             <img
               src={logoGoogle}
@@ -89,15 +91,16 @@ const CardPerfil = ({ nome, curso, email, foto, mudarFoto, editarPerfil }) => {
           </button>
 
           <button
-            className="flex h-[38px] w-[38px] shrink-0 items-center justify-center rounded-full bg-white/[0.92] p-0 transition-[transform,box-shadow] duration-200 cursor-pointer"
+            className="flex h-[38px] w-[38px] shrink-0 items-center justify-center overflow-hidden rounded-full bg-white/[0.92] p-0 transition-[transform,box-shadow] duration-200 cursor-pointer"
             type="button"
             title="Conectar Notion"
             aria-label="Conectar Notion"
+            onClick={conectarNotion}
           >
             <img
               src={logoNotion}
               alt="Notion"
-              className="h-[80px] w-[80px] object-contain"
+              className="h-[26px] w-auto max-w-none shrink-0"
             />
           </button>
         </div>

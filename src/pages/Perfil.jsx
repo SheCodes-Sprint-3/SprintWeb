@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import avatarPadrao from "../assets/avatar.png";
 import CardPerfil from "../components/CardPerfil";
+import { useToast } from "../components/useToast";
 
 const CHAVE_PERFIL = "joviclass:perfil";
 
@@ -14,6 +15,8 @@ function lerPerfil() {
 }
 
 const Perfil = () => {
+  const { mostrarToast, ToastEl } = useToast();
+
   const [nome, setNome] = useState(() => lerPerfil().nome ?? "Helena Martins");
   const [curso, setCurso] = useState(() => lerPerfil().curso ?? "Economia · 4º período");
   const [email, setEmail] = useState(() => lerPerfil().email ?? "helena.martins@email.com");
@@ -53,6 +56,8 @@ const Perfil = () => {
           foto={foto}
           mudarFoto={setFoto}
           editarPerfil={abrirModal}
+          conectarGoogle={() => mostrarToast("Google ainda não está integrado.")}
+          conectarNotion={() => mostrarToast("Notion ainda não está integrado.")}
         />
 
         <h2 className="mt-[22px] mb-3 text-[1.05rem] font-extrabold text-[#12142b]">
@@ -87,6 +92,8 @@ const Perfil = () => {
           Sair da conta
         </button>
       </main>
+
+      {ToastEl}
 
       {modalAberto && (
         <div
