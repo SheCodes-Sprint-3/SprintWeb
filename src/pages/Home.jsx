@@ -3,43 +3,60 @@ import { Link } from "react-router-dom";
 import AcessoRapido from "../components/AcessoRapido";
 import ProgressoCard from "../components/ProgressoCard";
 import ResumoCards from "../components/ResumoCards";
-import Overlay from "../components/Overlay";
 import ProximasProvas from "../components/ProximasProvas";
 import UltimosArquivos from "../components/UltimosArquivos";
 
 const Home = () => {
-    const [overlayAberto, setOverlayAberto] = useState(false);
-
-    const [progresso, setProgresso] = useState(() => {
-        const salvo = localStorage.getItem("joviclass:progresso");
-        return salvo
-            ? JSON.parse(salvo)
-            : {
-                valor: 78,
-                tarefasConcluidas: 3,
-                materiasEstudadas: 2,
-                anotacoesFeitas: 12,
-            };
+    const [nomeUsuario] = useState(() => {
+        try {
+            const perfil = JSON.parse(localStorage.getItem("joviclass:perfil") || "{}");
+            return perfil.nome?.trim().split(" ")[0] || "Helena";
+        } catch {
+            return "Helena";
+        }
     });
 
-    useEffect(() => {
-        localStorage.setItem("joviclass:progresso", JSON.stringify(progresso));
-    }, [progresso]);
+    const [tarefas] = useState(() => {
+        try {
+            return JSON.parse(localStorage.getItem("joviclass:tarefas") || "[]");
+        } catch {
+            return [];
+        }
+    });
 
-    function confirmarAcao() {
-        setProgresso((atual) => ({
-            ...atual,
-            tarefasConcluidas: atual.tarefasConcluidas + 1,
-            valor: Math.min(100, atual.valor + Math.round(100 / 13)),
-        }));
-        setOverlayAberto(false);
-    }
+    const totalTarefas = tarefas.length;
+    const tarefasConcluidas = tarefas.filter((t) => t.concluida).length;
+
+    const progresso = {
+        valor: totalTarefas === 0 ? 0 : Math.round((tarefasConcluidas / totalTarefas) * 100),
+        tarefasConcluidas,
+        materiasEstudadas: 2,
+        anotacoesFeitas: 12,
+    };
+
+    const [contagens] = useState(() => {
+        try {
+            const materias = JSON.parse(localStorage.getItem("materias") || "[]");
+            let arquivos = 0;
+            let anotacoes = 0;
+
+            materias.forEach((m) => {
+                const itens = JSON.parse(localStorage.getItem(`materia:${m.id}:itens`) || "[]");
+                arquivos += itens.filter((i) => i.tipo === "arquivo").length;
+                anotacoes += itens.filter((i) => i.tipo === "anotacao").length;
+            });
+
+            return { materias: materias.length, arquivos, anotacoes };
+        } catch {
+            return { materias: 0, arquivos: 0, anotacoes: 0 };
+        }
+    });
 
     return (
         <main className="mx-auto w-full max-w-[1100px] flex-1 px-[18px] py-[22px] pb-10 min-[900px]:px-11 min-[900px]:py-10">
             <div className="mb-5">
                 <h1 className="mb-0.5 text-[1.7rem] font-extrabold text-[#12142b]">
-                    Olá, Helena!
+                    Olá, {nomeUsuario}!
                 </h1>
                 <p className="mb-5 text-sm text-[var(--bg-color5)]">
                     Vamos continuar seus estudos?
@@ -53,20 +70,12 @@ const Home = () => {
                 anotacoesFeitas={progresso.anotacoesFeitas}
             />
 
-            <button
-                type="button"
-                className="mt-3 inline-block cursor-pointer rounded-xl border-0 bg-[var(--bg-color1)] px-[18px] py-[11px] text-[13.5px] font-bold text-white"
-                onClick={() => setOverlayAberto(true)}
-            >
-                Marcar tarefa como concluída
-            </button>
-
             <ResumoCards
                 itens={[
-                    { label: "Matérias", valor: 6 },
-                    { label: "Arquivos", valor: 24 },
-                    { label: "Anotações", valor: 136 },
-                    { label: "Tarefas", valor: 8 },
+                    { label: "Matérias", valor: contagens.materias },
+                    { label: "Arquivos", valor: contagens.arquivos },
+                    { label: "Anotações", valor: contagens.anotacoes },
+                    { label: "Tarefas", valor: totalTarefas },
                 ]}
             />
 
@@ -114,12 +123,6 @@ const Home = () => {
                 </div>
             </section>
 
-            {overlayAberto && (
-                <Overlay
-                    cancelar={() => setOverlayAberto(false)}
-                    confirmar={confirmarAcao}
-                />
-            )}
         </main>
     );
 };

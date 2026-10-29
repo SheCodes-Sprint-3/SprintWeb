@@ -3,10 +3,20 @@ import { Link } from "react-router-dom";
 import avatarPadrao from "../assets/avatar.png";
 import CardPerfil from "../components/CardPerfil";
 
+const CHAVE_PERFIL = "joviclass:perfil";
+
+function lerPerfil() {
+  try {
+    return JSON.parse(localStorage.getItem(CHAVE_PERFIL)) || {};
+  } catch {
+    return {};
+  }
+}
+
 const Perfil = () => {
-  const [nome, setNome] = useState("Helena Martins");
-  const [curso, setCurso] = useState("Economia · 4º período");
-  const [email, setEmail] = useState("helena.martins@email.com");
+  const [nome, setNome] = useState(() => lerPerfil().nome ?? "Helena Martins");
+  const [curso, setCurso] = useState(() => lerPerfil().curso ?? "Economia · 4º período");
+  const [email, setEmail] = useState(() => lerPerfil().email ?? "helena.martins@email.com");
   const [foto, setFoto] = useState(avatarPadrao);
   const [modalAberto, setModalAberto] = useState(false);
 
@@ -20,6 +30,7 @@ const Perfil = () => {
 
   const salvarPerfil = (event) => {
     event.preventDefault();
+    localStorage.setItem(CHAVE_PERFIL, JSON.stringify({ nome, curso, email }));
     setModalAberto(false);
   };
 

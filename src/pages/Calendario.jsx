@@ -1,5 +1,5 @@
-import { useState, useMemo } from "react";
-import {ChevronLeft, ChevronRight, Plus, X, BookOpen, CalendarDays, Trash2, CheckCircle2, Home, Camera, ClipboardList, User,} from "lucide-react";
+import { useState, useMemo, useEffect } from "react";
+import { ChevronLeft, ChevronRight, Plus, X, BookOpen, CalendarDays, Trash2, CheckCircle2, Home, Camera, ClipboardList, User, } from "lucide-react";
 
 const MESES = [
   "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
@@ -13,6 +13,14 @@ const PRIORIDADES = {
   media: { rotulo: "Média", borda: "border-l-[#fb8c00]", selo: "bg-[#fff3e0] text-[#e65100]" },
   baixa: { rotulo: "Baixa", borda: "border-l-[#43a047]", selo: "bg-[#e8f5e9] text-[#2e7d32]" },
 };
+
+function lerStorage(chave, padrao) {
+  try {
+    return JSON.parse(localStorage.getItem(chave)) ?? padrao;
+  } catch {
+    return padrao;
+  }
+}
 
 function mesmoDia(data, ano, mes, dia) {
   return (
@@ -55,11 +63,19 @@ export default function CalendarioJoviClass() {
   const hoje = useMemo(() => new Date(), []);
   const [dataAtual, setDataAtual] = useState(new Date());
 
-  const [eventos, setEventos] = useState([]); 
-  const [entregas, setEntregas] = useState([]); 
-  const [tarefas, setTarefas] = useState([]); 
+  const [eventos, setEventos] = useState([]);
+  const [entregas, setEntregas] = useState(() => lerStorage("joviclass:entregas", []));
+  const [tarefas, setTarefas] = useState(() => lerStorage("joviclass:tarefas", []));
 
-  const [diaSelecionado, setDiaSelecionado] = useState(null); 
+  useEffect(() => {
+    localStorage.setItem("joviclass:entregas", JSON.stringify(entregas));
+  }, [entregas]);
+
+  useEffect(() => {
+    localStorage.setItem("joviclass:tarefas", JSON.stringify(tarefas));
+  }, [tarefas]);
+
+  const [diaSelecionado, setDiaSelecionado] = useState(null);
   const [modalEventoAberto, setModalEventoAberto] = useState(false);
   const [modalEntregaAberto, setModalEntregaAberto] = useState(false);
   const [modalTarefaAberto, setModalTarefaAberto] = useState(false);
@@ -175,7 +191,7 @@ export default function CalendarioJoviClass() {
 
   return (
     <div className="bg-[#f0f0f5] min-h-full font-[Manrope,Arial,sans-serif]">
-      {}
+      { }
       <div className="bg-gradient-to-br from-[#0015d6] to-[#000fb0] text-white w-full -mt-[25px]">
         <div className="bg-gradient-to-br from-[#000fb0] to-[#1466ff] pt-6 px-6 pb-7 sm:px-8">
           <h1 className="text-2xl font-extrabold tracking-[-0.02em] m-0 sm:text-[30px]">Calendário</h1>
@@ -221,16 +237,14 @@ export default function CalendarioJoviClass() {
                 <div
                   key={idx}
                   onClick={() => abrirDia(dia)}
-                  className={`relative flex flex-col items-start justify-start p-1.5 h-11 rounded-lg cursor-pointer text-[11px] font-medium sm:h-[90px] sm:text-sm ${
-                    ehHoje ? "bg-[#000fb0] text-white" : "bg-[#f0f0f5] text-[#12142b]"
-                  }`}
+                  className={`relative flex flex-col items-start justify-start p-1.5 h-11 rounded-lg cursor-pointer text-[11px] font-medium sm:h-[90px] sm:text-sm ${ehHoje ? "bg-[#000fb0] text-white" : "bg-[#f0f0f5] text-[#12142b]"
+                    }`}
                 >
                   <span className="font-bold">{dia}</span>
                   {totalDoDia > 0 && (
                     <span
-                      className={`absolute bottom-1.5 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full ${
-                        ehHoje ? "bg-white" : "bg-[#1466ff]"
-                      }`}
+                      className={`absolute bottom-1.5 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full ${ehHoje ? "bg-white" : "bg-[#1466ff]"
+                        }`}
                     />
                   )}
                 </div>
@@ -239,7 +253,7 @@ export default function CalendarioJoviClass() {
           </div>
         </div>
 
-    
+
         <div className="bg-white rounded-2xl mt-4 p-4 sm:p-6">
           <div className="flex items-center justify-between mb-4 flex-wrap gap-3">
             <h2 className="text-[#111] text-base font-bold flex items-center gap-2 m-0 sm:text-lg">
