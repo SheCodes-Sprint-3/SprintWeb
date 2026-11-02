@@ -6,7 +6,9 @@ import ListaArquivos from "../components/ListaArquivos";
 import FormularioAnotacao from "../components/FormularioAnotacao";
 import DropdownArquivo from "../components/DropdownArquivo";
 import ViewerEdicaoAnotacao from "../components/ViewerEdicaoAnotacao";
-import { useToast } from "../components/useToast";
+import Toast from "../components/Toast";
+import { useToast } from "../hooks/useToast";
+import useLocalStorage from "../hooks/useLocalStorage";
 import "../css/PaginaMateria.css";
 
 function novoId() {
@@ -27,34 +29,21 @@ function tipoArquivoPorNome(nome) {
 
 const PaginaMateria = () => {
   const { id } = useParams();
-  const { mostrarToast, ToastEl } = useToast();
+  const { toast, mostrarToast } = useToast();
 
-  const [nomeMateria] = useState(() => {
-    try {
-      const materias = JSON.parse(localStorage.getItem("materias") || "[]");
-      const materia = materias.find((m) => String(m.id) === String(id));
-      return materia?.nome || "Matéria";
-    } catch {
-      return "Matéria";
-    }
-  });
+  // Nome da matéria, lido da lista salva pela página de Matérias
+  const [materias] = useLocalStorage("materias", []);
+  const nomeMateria =
+    materias.find((m) => String(m.id) === String(id))?.nome || "Matéria";
 
-  const [itens, setItens] = useState(() => {
-    try {
-      return JSON.parse(
-        localStorage.getItem(`materia:${id}:itens`) || "[]"
-      );
-    } catch {
-      return [];
-    }
-  });
+  // Itens (anotações e arquivos) desta matéria
+  const [itens, setItens] = useLocalStorage(`materia:${id}:itens`, []);
 
   const [busca, setBusca] = useState("");
   const [anotacaoAberta, setAnotacaoAberta] = useState(false);
   const [tituloAnotacao, setTituloAnotacao] = useState("");
   const [textoAnotacao, setTextoAnotacao] = useState("");
   const [dropdown, setDropdown] = useState(null);
-
 
   const inputArquivoRef = useRef(null);
   const formularioRef = useRef(null);
@@ -64,17 +53,8 @@ const PaginaMateria = () => {
 
     const q = busca.toLowerCase();
 
-    return itens.filter((item) =>
-      item.nome.toLowerCase().includes(q)
-    );
+    return itens.filter((item) => item.nome.toLowerCase().includes(q));
   }, [itens, busca]);
-
-  useEffect(() => {
-    localStorage.setItem(
-      `materia:${id}:itens`,
-      JSON.stringify(itens)
-    );
-  }, [itens, id]);
 
   function abrirCriarAnotacao() {
     setTituloAnotacao("");
@@ -82,7 +62,10 @@ const PaginaMateria = () => {
     setAnotacaoAberta(true);
 
     setTimeout(() => {
-      formularioRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+      formularioRef.current?.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
     }, 0);
   }
 
@@ -187,15 +170,13 @@ const PaginaMateria = () => {
 
     setItens((prev) =>
       prev.map((item) =>
-        item.id === viewerItem.id
-          ? { ...item, conteudo: novoTexto }
-          : item
+        item.id === viewerItem.id ? { ...item, conteudo: novoTexto } : item
       )
     );
 
     setViewerItem((item) => ({
       ...item,
-      conteudo: novoTexto
+      conteudo: novoTexto,
     }));
   }
 
@@ -207,16 +188,12 @@ const PaginaMateria = () => {
     if (!item) return;
 
     if (
-      !window.confirm(
-        `Excluir "${item.nome}"? Essa ação não pode ser desfeita.`
-      )
+      !window.confirm(`Excluir "${item.nome}"? Essa ação não pode ser desfeita.`)
     ) {
       return;
     }
 
-    setItens((prev) =>
-      prev.filter((item) => item.id !== itemId)
-    );
+    setItens((prev) => prev.filter((i) => i.id !== itemId));
   }
 
   function baixarItem(itemId) {
@@ -235,10 +212,7 @@ const PaginaMateria = () => {
       return;
     }
 
-    const blob = new Blob(
-      [item.conteudo || ""],
-      { type: "text/plain" }
-    );
+    const blob = new Blob([item.conteudo || ""], { type: "text/plain" });
 
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
@@ -251,7 +225,6 @@ const PaginaMateria = () => {
   return (
     <>
       <main className="mx-auto w-full max-w-[1100px] flex-1 px-[18px] pt-[22px] pb-10 min-[900px]:px-11 min-[900px]:pt-10">
-
         <HeaderMateria
           nomeMateria={nomeMateria}
           busca={busca}
@@ -270,7 +243,7 @@ const PaginaMateria = () => {
           ref={inputArquivoRef}
           multiple
           accept="image/*,.pdf,.txt,.doc,.docx"
-          style={{ display: "none" }}
+          className="hidden"
           onChange={handleArquivosSelecionados}
         />
 
@@ -281,7 +254,10 @@ const PaginaMateria = () => {
         />
 
         {anotacaoAberta && (
-          <div ref={formularioRef} className="scroll-mt-24 min-[900px]:scroll-mt-6">
+          <div
+            ref={formularioRef}
+            className="scroll-mt-24 min-[900px]:scroll-mt-6"
+          >
             <FormularioAnotacao
               tituloAnotacao={tituloAnotacao}
               textoAnotacao={textoAnotacao}
@@ -309,7 +285,7 @@ const PaginaMateria = () => {
         onBaixar={baixarItem}
       />
 
-      {ToastEl}
+      <Toast toast={toast} />
     </>
   );
 };

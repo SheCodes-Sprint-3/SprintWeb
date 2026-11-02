@@ -1,9 +1,11 @@
-
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import CardsMaterias from "../components/CardsMaterias";
 import ModalMateria from "../components/ModalMateria";
 import DropdownMateria from "../components/DropdownMateria";
+import Toast from "../components/Toast";
+import { useToast } from "../hooks/useToast";
+import useLocalStorage from "../hooks/useLocalStorage";
 
 const CHAVE_MATERIAS = "materias";
 
@@ -18,48 +20,11 @@ const CORES = [
   { cor: "#ea580c", nome: "Laranja" },
 ];
 
-function useToast() {
-  const [toast, setToast] = useState(null);
-  const timerRef = useRef(null);
-
-  const mostrarToast = useCallback((msg) => {
-    setToast({ msg, show: true });
-    clearTimeout(timerRef.current);
-    timerRef.current = setTimeout(() => {
-      setToast((t) => (t ? { ...t, show: false } : t));
-    }, 2500);
-  }, []);
-
-  const ToastEl = toast ? (
-    <div
-      className={`fixed bottom-[90px] left-1/2 z-[200] -translate-x-1/2 rounded-xl bg-[#12142b] px-[18px] py-3 text-[13px] font-bold text-white transition-[opacity,transform] duration-[250ms] ease ${
-        toast.show
-          ? "translate-y-0 opacity-100"
-          : "pointer-events-none translate-y-5 opacity-0"
-      }`}
-    >
-      {toast.msg}
-    </div>
-  ) : null;
-
-  return { mostrarToast, ToastEl };
-}
-
 const Materia = () => {
   const navigate = useNavigate();
-  const { mostrarToast, ToastEl } = useToast();
+  const { toast, mostrarToast } = useToast();
 
-  const [materias, setMaterias] = useState(() => {
-    try {
-      return JSON.parse(localStorage.getItem(CHAVE_MATERIAS) || "[]");
-    } catch {
-      return [];
-    }
-  });
-
-  useEffect(() => {
-    localStorage.setItem(CHAVE_MATERIAS, JSON.stringify(materias));
-  }, [materias]);
+  const [materias, setMaterias] = useLocalStorage(CHAVE_MATERIAS, []);
 
   const [modalAberto, setModalAberto] = useState(false);
   const [editandoId, setEditandoId] = useState(null);
@@ -156,20 +121,16 @@ const Materia = () => {
   function toggleCompartilhar(id) {
     setDropdown(null);
 
+    const materia = materias.find((m) => m.id === id);
+    if (!materia) return;
+
+    const compartilhada = !materia.compartilhada;
+
     setMaterias((prev) =>
-      prev.map((materia) => {
-        if (materia.id !== id) return materia;
-
-        const compartilhada = !materia.compartilhada;
-
-        mostrarToast(
-          compartilhada
-            ? "📤 Pasta compartilhada!"
-            : "🔒 Compartilhamento removido"
-        );
-
-        return { ...materia, compartilhada };
-      })
+      prev.map((m) => (m.id === id ? { ...m, compartilhada } : m))
+    );
+    mostrarToast(
+      compartilhada ? "📤 Pasta compartilhada!" : "🔒 Compartilhamento removido"
     );
   }
 
@@ -185,13 +146,13 @@ const Materia = () => {
 
     if (!confirmou) return;
 
-    setMaterias((prev) => prev.filter((materia) => materia.id !== id));
+    setMaterias((prev) => prev.filter((m) => m.id !== id));
     mostrarToast("🗑️ Matéria excluída");
   }
 
   return (
     <>
-      {ToastEl}
+      <Toast toast={toast} />
 
       <main className="mx-auto w-full max-w-[1100px] flex-1 px-[18px] pt-[22px] pb-10 min-[900px]:px-11 min-[900px]:pt-10">
         <div className="flex flex-row flex-wrap items-start justify-between gap-[15px] max-[899px]:flex-col max-[899px]:gap-5">

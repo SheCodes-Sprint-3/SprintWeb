@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
+import useAuth from "../hooks/useAuth";
 import logo from "../assets/logo.png";
 
 const HeaderPagina = ({ notificacoes, marcarTodasComoLidas }) => {
@@ -14,6 +15,8 @@ const HeaderPagina = ({ notificacoes, marcarTodasComoLidas }) => {
             ? "bg-[linear-gradient(135deg,var(--bg-color4),#4da3ff)] shadow-[0_6px_18px_rgba(20,102,255,0.4)]"
             : "bg-[var(--bg-color3)]"
         }`;
+    
+    const { logout } = useAuth();
 
     return (
         <header className="relative  sticky top-0 z-30 flex flex-col bg-[linear-gradient(135deg,var(--grad-inicio)_0%,var(--grad-fim)_100%)] px-5 py-[18px] text-white shadow-[0_4px_20px_rgba(0,0,0,0.15)] min-[900px]:max-h-screen min-[900px]:min-h-screen min-[900px]:w-[280px] min-[900px]:shrink-0 min-[900px]:self-start min-[900px]:overflow-y-auto min-[900px]:px-[22px] min-[900px]:py-[30px]">
@@ -174,6 +177,13 @@ const HeaderPagina = ({ notificacoes, marcarTodasComoLidas }) => {
                     onClick={() => setMenuAberto(false)}
                 >
                     Voltar a câmera ↩
+                </Link>
+                <Link
+                    to="/login"
+                    className={linkClass("/login")}
+                    onClick={logout}
+                >
+                    Sair
                 </Link>
             </nav>
         </header>

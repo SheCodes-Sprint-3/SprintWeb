@@ -12,6 +12,18 @@ dist
 dist-ssr
 *.local
 
+# dependências e build
+node_modules
+dist
+
+# variáveis de ambiente (mantém só o exemplo)
+.env
+.env.*
+!.env.example
+
+# Vercel
+.vercel
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

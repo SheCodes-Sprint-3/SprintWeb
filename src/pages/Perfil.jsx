@@ -2,7 +2,8 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import avatarPadrao from "../assets/avatar.png";
 import CardPerfil from "../components/CardPerfil";
-import { useToast } from "../components/useToast";
+import { useToast } from "../hooks/useToast"
+import useAuth from "../hooks/useAuth";
 
 const CHAVE_PERFIL = "joviclass:perfil";
 
@@ -36,6 +37,8 @@ const Perfil = () => {
     localStorage.setItem(CHAVE_PERFIL, JSON.stringify({ nome, curso, email }));
     setModalAberto(false);
   };
+
+  const { logout } = useAuth();
 
   return (
     <>
@@ -87,7 +90,7 @@ const Perfil = () => {
         <button
           className="mt-[22px] block w-full cursor-pointer rounded-[14px] border border-[#ffd6d6] bg-[#fff5f5] p-[14px] text-sm font-extrabold text-[#e0304a] transition-colors hover:bg-[#ffe9e9]"
           type="button"
-          onClick={() => alert("Você saiu da conta.")}
+          onClick={logout}
         >
           Sair da conta
         </button>
@@ -180,47 +183,6 @@ const Perfil = () => {
         </div>
       )}
 
-      <nav className="fixed right-0 bottom-0 left-0 z-40 flex items-center justify-around bg-white px-1.5 pt-2 pb-[10px] shadow-[0_-4px_16px_rgba(0,0,0,0.08)] min-[900px]:hidden">
-        <Link
-          to="/"
-          className="flex flex-col items-center gap-[3px] text-[10.5px] font-bold text-[var(--bg-color5)]"
-        >
-          <span className="text-lg">🏠︎</span>
-          <span>Início</span>
-        </Link>
-
-        <Link
-          to="/materias"
-          className="flex flex-col items-center gap-[3px] text-[10.5px] font-bold text-[var(--bg-color5)]"
-        >
-          <span className="text-lg">📖</span>
-          <span>Matérias</span>
-        </Link>
-
-        <Link
-          to="/camera"
-          aria-label="Câmera"
-          className="mt-[-26px] flex h-[52px] w-[52px] items-center justify-center rounded-full bg-[var(--bg-color1)] text-xl shadow-[0_8px_18px_rgba(0,15,176,0.4)]"
-        >
-          <span className="text-xl">📷</span>
-        </Link>
-
-        <Link
-          to="/calendario"
-          className="flex flex-col items-center gap-[3px] text-[10.5px] font-bold text-[var(--bg-color5)]"
-        >
-          <span className="text-lg">📝</span>
-          <span>Tarefas</span>
-        </Link>
-
-        <Link
-          to="/perfil"
-          className="flex flex-col items-center gap-[3px] text-[10.5px] font-bold text-[var(--bg-color1)]"
-        >
-          <span className="text-lg">👤</span>
-          <span>Perfil</span>
-        </Link>
-      </nav>
     </>
   );
 };
