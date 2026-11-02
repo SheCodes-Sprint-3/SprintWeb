@@ -1,8 +1,6 @@
 import { request } from "../services/api";
 import useFetch from "./useFetch";
 
-// Estado e regras das notificações, fora do App.
-// Espera na API: /notificacoes  ->  { id, texto, lida }
 export default function useNotificacoes() {
   const { dados, setDados, carregando, erro } = useFetch("/notificacoes");
   const notificacoes = dados ?? [];
@@ -11,9 +9,7 @@ export default function useNotificacoes() {
 
   async function marcarTodasComoLidas() {
     const pendentes = notificacoes.filter((n) => !n.lida);
-    // Atualiza a tela na hora...
     setDados((atual) => (atual ?? []).map((n) => ({ ...n, lida: true })));
-    // ...e sincroniza com a API.
     try {
       await Promise.all(
         pendentes.map((n) =>

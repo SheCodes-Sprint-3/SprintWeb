@@ -1,8 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { request } from "../services/api";
 
-// Busca dados de um caminho da API e controla loading e erro.
-// Se `caminho` for null/undefined, não faz a requisição.
 export default function useFetch(caminho) {
   const [dados, setDados] = useState(null);
   const [carregando, setCarregando] = useState(Boolean(caminho));

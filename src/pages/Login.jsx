@@ -3,9 +3,8 @@ import { Navigate } from "react-router-dom";
 import { Eye, EyeOff } from "lucide-react";
 import useAuth from "../hooks/useAuth";
 import useLogin from "../hooks/useLogin";
-import logo from "../assets/logo.png"; // ajuste o caminho se necessário
+import logo from "../assets/logo.png"; 
 
-// Classes reutilizadas pelos dois campos
 const classeRotulo = "text-xs font-bold text-[#333]";
 const classeInput =
   "h-12 w-full rounded-xl border border-[#e0e4ff] bg-[#fafaff] px-[15px] " +
@@ -20,10 +19,8 @@ export default function Login() {
   if (autenticado) return <Navigate to="/" replace />;
 
   return (
-    // fixed + overflow-y-auto: cobre a tela e rola sozinho em telas baixas
     <div className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-[linear-gradient(135deg,#0015d6_0%,#000fb0_55%,#07147d_100%)] p-4 font-[Manrope,Arial,sans-serif] min-[651px]:items-center sm:p-5">
       <div className="w-full max-w-[430px] rounded-[20px] bg-white px-[22px] pb-[25px] pt-[30px] text-center shadow-[0_25px_60px_rgba(0,0,0,0.25),0_8px_25px_rgba(0,15,176,0.18)] sm:rounded-3xl sm:px-[34px] sm:pb-8 sm:pt-[38px]">
-        {/* Logo */}
         <div className="mb-[18px] flex flex-col items-center gap-2">
           <img
             src={logo}
@@ -35,7 +32,6 @@ export default function Login() {
           </span>
         </div>
 
-        {/* Título */}
         <div className="mb-[22px]">
           <h1 className="text-[1.3rem] font-extrabold tracking-tight text-[#12142b] sm:text-2xl">
             Falta pouco para começar
@@ -45,7 +41,6 @@ export default function Login() {
           </p>
         </div>
 
-        {/* Formulário */}
         <form onSubmit={enviar} className="flex flex-col gap-4 text-left">
           <div className="flex flex-col gap-1.5">
             <label htmlFor="loginEmail" className={classeRotulo}>
@@ -100,7 +95,6 @@ export default function Login() {
           </button>
         </form>
 
-        {/* Erro */}
         {erro && (
           <p
             role="alert"

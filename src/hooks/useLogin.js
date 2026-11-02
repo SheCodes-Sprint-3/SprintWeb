@@ -2,7 +2,6 @@ import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import useAuth from "./useAuth";
 
-// Lógica do formulário de login (a página só cuida do visual).
 export default function useLogin() {
   const { login } = useAuth();
   const navigate = useNavigate();
@@ -13,7 +12,6 @@ export default function useLogin() {
   const [erro, setErro] = useState("");
   const [enviando, setEnviando] = useState(false);
 
-  // atualizar("email") devolve o onChange do campo
   const atualizar = (nome) => (evento) =>
     setCampos((atual) => ({ ...atual, [nome]: evento.target.value }));
 

@@ -1,6 +1,5 @@
 import { useState } from "react";
 
-// Igual ao useState, mas persiste o valor no localStorage.
 export default function useLocalStorage(chave, valorInicial) {
   const [valor, setValor] = useState(() => {
     try {
@@ -21,7 +20,6 @@ export default function useLocalStorage(chave, valorInicial) {
           localStorage.setItem(chave, JSON.stringify(resultado));
         }
       } catch {
-        // localStorage indisponível: segue só em memória
       }
       return resultado;
     });

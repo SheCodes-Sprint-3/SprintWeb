@@ -1,6 +1,3 @@
-// Cliente simples para a API (MockAPI, json-server ou outra).
-// Defina VITE_API_URL no .env (local) e nas variáveis de ambiente da Vercel.
-// Ex.: VITE_API_URL=https://SEU_ID.mockapi.io/api/v1
 export const API_URL = import.meta.env.VITE_API_URL;
 
 export async function request(caminho, opcoes = {}) {
