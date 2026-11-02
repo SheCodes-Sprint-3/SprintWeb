@@ -9,7 +9,6 @@ import ViewerEdicaoAnotacao from "../components/ViewerEdicaoAnotacao";
 import Toast from "../components/Toast";
 import { useToast } from "../hooks/useToast";
 import useLocalStorage from "../hooks/useLocalStorage";
-import "../css/PaginaMateria.css";
 
 function novoId() {
   return `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
