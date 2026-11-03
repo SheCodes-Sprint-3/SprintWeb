@@ -276,7 +276,6 @@ export default function LandingPage({ rotaApp = "/home" }) {
           </div>
         </section>
 
-        {/* ===== Galeria ===== */}
         <section id="galeria" className={`${secao} bg-white`}>
           <div className={container}>
             <div className={tituloBloco}>
@@ -292,12 +291,12 @@ export default function LandingPage({ rotaApp = "/home" }) {
               {GALERIA.map((item) => (
                 <div
                   key={item.legenda}
-                  className={`${cardAzul} mx-auto flex h-[480px] max-h-screen w-full flex-col overflow-hidden p-[15px] min-[561px]:h-[650px] min-[561px]:max-w-[300px]`}
+                  className={`${cardAzul} mx-auto flex h-auto w-full flex-col overflow-hidden p-[15px] min-[561px]:h-[650px] min-[561px]:max-w-[300px]`}
                 >
                   <img
                     src={item.img}
                     alt={item.alt}
-                    className={`${printMobile} h-full min-h-0 w-full flex-auto`}
+                    className={`${printMobile} mx-auto h-auto w-full max-w-[280px] flex-none min-[561px]:h-full min-[561px]:min-h-0 min-[561px]:max-w-none min-[561px]:flex-auto`}
                   />
                   <p className="shrink-0 p-3 text-center text-sm text-[#071a35]">{item.legenda}</p>
                 </div>
