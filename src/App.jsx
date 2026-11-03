@@ -12,10 +12,9 @@ import Calendario from "./pages/Calendario";
 import Camera from "./pages/Camera";
 import Perfil from "./pages/Perfil";
 import Login from "./pages/Login";
+import LandingPage from "./pages/LandingPage";
 import "./index.css";
 
-// Layout como rota: renderiza o <Outlet /> no lugar do children.
-// Fica dentro de RotaPrivada, então só carrega notificações logado.
 function Layout() {
   const { notificacoes, marcarTodasComoLidas } = useNotificacoes();
 
@@ -39,13 +38,12 @@ const App = () => (
   <BrowserRouter>
     <AuthProvider>
       <Routes>
-        {/* Pública */}
+        
+        <Route path="/" element={<LandingPage rotaApp="/home" />} />
         <Route path="/login" element={<Login />} />
-
-        {/* Privadas */}
         <Route element={<RotaPrivada />}>
           <Route element={<Layout />}>
-            <Route path="/" element={<Home />} />
+            <Route path="/home" element={<Home />} />
             <Route path="/materias" element={<Materias />} />
             <Route path="/materias/:id" element={<PaginaMateria />} />
             <Route path="/calendario" element={<Calendario />} />

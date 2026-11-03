@@ -2,7 +2,8 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import logo from "../assets/logo.png";
 
-const CameraOverlay = ({ aberto, onCancelar }) => {
+// onSalvar(nome) -> grava a foto na matéria selecionada e devolve true/false
+const CameraOverlay = ({ aberto, onCancelar, onSalvar }) => {
   const navigate = useNavigate();
   const [nomeArquivo, setNomeArquivo] = useState("");
   const [salvarApp, setSalvarApp] = useState(true);
@@ -15,14 +16,18 @@ const CameraOverlay = ({ aberto, onCancelar }) => {
   const salvar = () => {
     const nome = nomeArquivo.trim() || "AulaX_DataX";
 
-    console.log("Nome do arquivo:", nome);
-    console.log("Salvar no App:", salvarApp);
+    const sucesso = onSalvar(nome);
+
+    if (!sucesso) {
+      alert("Não foi possível salvar a foto. O armazenamento do navegador pode estar cheio.");
+      return;
+    }
 
     setSalvando(true);
 
     setTimeout(() => {
       onCancelar();
-      navigate("/");
+      navigate("/home");
     }, 2000);
   };
 
@@ -43,8 +48,9 @@ const CameraOverlay = ({ aberto, onCancelar }) => {
         <div className="p-5">
           <p className="text-xs font-bold text-[#888] uppercase tracking-[0.06em] mb-2">Nome do arquivo</p>
 
+          {/* text-[#111827] corrige o texto branco: o input herdava text-white da página da câmera */}
           <input
-            className="w-full py-3 px-3.5 border-[1.5px] border-[#d1d5db] rounded-xl text-[15px] outline-none mb-2 font-[inherit] focus:border-[#1a56db]"
+            className="w-full py-3 px-3.5 border-[1.5px] border-[#d1d5db] rounded-xl bg-white text-[#111827] placeholder:text-[#9ca3af] text-[15px] outline-none mb-2 font-[inherit] focus:border-[#1a56db]"
             type="text"
             placeholder="AulaX_DataX"
             value={nomeArquivo}
@@ -55,8 +61,8 @@ const CameraOverlay = ({ aberto, onCancelar }) => {
 
           <label className="flex items-center gap-2 text-sm text-[#333] cursor-pointer mb-5">
             <input
-              className="w-[18px] h-[18px] accent-[#1a56db] cursor-pointer text-black"
-              type="text"
+              className="w-[18px] h-[18px] accent-[#1a56db] cursor-pointer"
+              type="checkbox"
               checked={salvarApp}
               onChange={(e) => setSalvarApp(e.target.checked)}
             />

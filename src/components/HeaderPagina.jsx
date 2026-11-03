@@ -132,8 +132,8 @@ const HeaderPagina = ({ notificacoes, marcarTodasComoLidas }) => {
                 className={`${menuAberto ? "flex" : "hidden"} mt-5 w-full flex-col gap-2.5 min-[900px]:mt-10 min-[900px]:flex`}
             >
                 <Link
-                    to="/"
-                    className={linkClass("/")}
+                    to="/home"
+                    className={linkClass("/home")}
                     onClick={() => setMenuAberto(false)}
                 >
                     Início
@@ -176,8 +176,17 @@ const HeaderPagina = ({ notificacoes, marcarTodasComoLidas }) => {
                     className={linkClass("/camera")}
                     onClick={() => setMenuAberto(false)}
                 >
-                    Voltar a câmera ↩
+                    Voltar a câmera 
                 </Link>
+
+                <Link
+                    to="/"
+                    className={linkClass("/")}
+                    onClick={() => setMenuAberto(false)}
+                >
+                    Sobre
+                </Link>
+
                 <Link
                     to="/login"
                     className={linkClass("/login")}

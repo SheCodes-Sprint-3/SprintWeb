@@ -5,6 +5,7 @@ import useAuth from "../hooks/useAuth";
 import useLogin from "../hooks/useLogin";
 import logo from "../assets/logo.png"; 
 
+
 const classeRotulo = "text-xs font-bold text-[#333]";
 const classeInput =
   "h-12 w-full rounded-xl border border-[#e0e4ff] bg-[#fafaff] px-[15px] " +
@@ -16,7 +17,7 @@ export default function Login() {
   const { campos, atualizar, erro, enviando, enviar } = useLogin();
   const [mostrarSenha, setMostrarSenha] = useState(false);
 
-  if (autenticado) return <Navigate to="/" replace />;
+  if (autenticado) return <Navigate to="/home" replace />;
 
   return (
     <div className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-[linear-gradient(135deg,#0015d6_0%,#000fb0_55%,#07147d_100%)] p-4 font-[Manrope,Arial,sans-serif] min-[651px]:items-center sm:p-5">

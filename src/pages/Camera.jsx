@@ -6,6 +6,21 @@ import CameraZoom from "../components/CameraZoom";
 import CameraControls from "../components/CameraControls";
 import CameraOverlay from "../components/CameraOverlay";
 
+// Gera uma foto colorida (JPEG) do quadro atual do vídeo, limitada a 1280px
+// para não estourar o limite do localStorage.
+function capturarFoto(video) {
+  const largura = video.videoWidth || 640;
+  const altura = video.videoHeight || 480;
+  const escala = Math.min(1, 1280 / Math.max(largura, altura));
+
+  const c = document.createElement("canvas");
+  c.width = Math.round(largura * escala);
+  c.height = Math.round(altura * escala);
+  c.getContext("2d").drawImage(video, 0, 0, c.width, c.height);
+
+  return c.toDataURL("image/jpeg", 0.8);
+}
+
 const Camera = () => {
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
@@ -13,7 +28,9 @@ const Camera = () => {
   const [resultado, setResultado] = useState("");
   const [processando, setProcessando] = useState(false);
   const [dropdownAberto, setDropdownAberto] = useState(false);
-  const [materiaSelecionada, setMateriaSelecionada] = useState(false);
+  // Agora guarda a matéria escolhida (objeto {id, nome, ...}) em vez de true/false
+  const [materiaSelecionada, setMateriaSelecionada] = useState(null);
+  const [fotoCapturada, setFotoCapturada] = useState(null);
   const [overlayAberto, setOverlayAberto] = useState(false);
 
   useEffect(() => {
@@ -57,6 +74,9 @@ const Camera = () => {
     const canvas = canvasRef.current;
     const context = canvas.getContext("2d");
 
+    // Foto colorida que será salva na matéria (o canvas abaixo é só para o OCR)
+    setFotoCapturada(capturarFoto(video));
+
     canvas.width = video.videoWidth || 640;
     canvas.height = video.videoHeight || 480;
     context.setTransform(1, 0, 0, 1, 0, 0);
@@ -84,8 +104,8 @@ const Camera = () => {
     setDropdownAberto((estadoAtual) => !estadoAtual);
   };
 
-  const selecionarMateria = () => {
-    setMateriaSelecionada(true);
+  const selecionarMateria = (materia) => {
+    setMateriaSelecionada(materia);
     setDropdownAberto(false);
   };
 
@@ -95,6 +115,38 @@ const Camera = () => {
 
   const fecharOverlay = () => {
     setOverlayAberto(false);
+  };
+
+  // Grava a foto na lista da matéria, no mesmo formato que PaginaMateria lê
+  // (chave `materia:<id>:itens`). Lê o localStorage na hora para não sobrescrever
+  // itens que já existem.
+  const salvarFoto = (nome) => {
+    if (!materiaSelecionada || !fotoCapturada) {
+      return false;
+    }
+
+    const chave = `materia:${materiaSelecionada.id}:itens`;
+    const nomeFinal = `${nome.replace(/\.(jpe?g)$/i, "")}.jpg`;
+
+    try {
+      const salvos = JSON.parse(localStorage.getItem(chave) || "[]");
+      const lista = Array.isArray(salvos) ? salvos : [];
+
+      lista.push({
+        id: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+        tipo: "arquivo",
+        nome: nomeFinal,
+        tipoArquivo: "imagem",
+        url: fotoCapturada,
+        criadoEm: new Date().toISOString(),
+      });
+
+      localStorage.setItem(chave, JSON.stringify(lista));
+      return true;
+    } catch (erro) {
+      console.error(erro);
+      return false;
+    }
   };
 
   return (
@@ -116,7 +168,7 @@ const Camera = () => {
             </div>
           )}
 
-          {materiaSelecionada && (
+          {materiaSelecionada && fotoCapturada && (
             <button
               className="absolute bottom-[70px] right-6 w-[52px] h-[52px] border-none rounded-full bg-[#00c853] text-white text-[1.3rem] cursor-pointer z-[90] flex items-center justify-center shadow-[0_8px_20px_rgba(0,200,83,0.4)] transition-transform duration-200 hover:scale-[1.08] active:scale-95"
               onClick={abrirOverlay}
@@ -127,7 +179,7 @@ const Camera = () => {
         </div>
 
         <CameraControls onScan={escanearTexto} processando={processando} />
-        <CameraOverlay aberto={overlayAberto} onCancelar={fecharOverlay} />
+        <CameraOverlay aberto={overlayAberto} onCancelar={fecharOverlay} onSalvar={salvarFoto} />
       </div>
     </div>
   );

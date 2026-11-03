@@ -1,28 +1,51 @@
-import { request } from "../services/api";
-import useFetch from "./useFetch";
+import useLocalStorage from "./useLocalStorage";
+
+const agora = Date.now();
+const minutosAtras = (min) => new Date(agora - min * 60 * 1000).toISOString();
+
+// Notificações fictícias: só entram no localStorage na primeira vez
+const NOTIFICACOES_INICIAIS = [
+  {
+    id: 1,
+    titulo: "Prova de Literatura",
+    mensagem: "Sua prova é amanhã. Que tal revisar suas anotações?",
+    data: minutosAtras(20),
+    lida: false,
+  },
+  {
+    id: 2,
+    titulo: "Nova entrega",
+    mensagem: "Trabalho de Filosofia vence em 3 dias.",
+    data: minutosAtras(180),
+    lida: false,
+  },
+  {
+    id: 3,
+    titulo: "Arquivo salvo",
+    mensagem: "Sua foto foi adicionada à matéria Língua Portuguesa.",
+    data: minutosAtras(60 * 26),
+    lida: true,
+  },
+];
 
 export default function useNotificacoes() {
-  const { dados, setDados, carregando, erro } = useFetch("/notificacoes");
-  const notificacoes = dados ?? [];
+  const [notificacoes, setNotificacoes] = useLocalStorage(
+    "notificacoes",
+    NOTIFICACOES_INICIAIS
+  );
 
   const naoLidas = notificacoes.filter((n) => !n.lida).length;
 
-  async function marcarTodasComoLidas() {
-    const pendentes = notificacoes.filter((n) => !n.lida);
-    setDados((atual) => (atual ?? []).map((n) => ({ ...n, lida: true })));
-    try {
-      await Promise.all(
-        pendentes.map((n) =>
-          request(`/notificacoes/${n.id}`, {
-            method: "PUT",
-            body: JSON.stringify({ ...n, lida: true }),
-          })
-        )
-      );
-    } catch (e) {
-      console.error("Falha ao sincronizar notificações:", e.message);
-    }
+  function marcarTodasComoLidas() {
+    setNotificacoes((atuais) => atuais.map((n) => ({ ...n, lida: true })));
   }
 
-  return { notificacoes, naoLidas, carregando, erro, marcarTodasComoLidas };
+  // carregando e erro continuam no retorno para não quebrar quem já os usa
+  return {
+    notificacoes,
+    naoLidas,
+    carregando: false,
+    erro: null,
+    marcarTodasComoLidas,
+  };
 }
