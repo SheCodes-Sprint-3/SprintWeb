@@ -1,20 +1,15 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import AcessoRapido from "../components/AcessoRapido";
 import ProgressoCard from "../components/ProgressoCard";
 import ResumoCards from "../components/ResumoCards";
 import ProximasProvas from "../components/ProximasProvas";
 import UltimosArquivos from "../components/UltimosArquivos";
+import usePerfil from "../hooks/usePerfil";
 
 const Home = () => {
-    const [nomeUsuario] = useState(() => {
-        try {
-            const perfil = JSON.parse(localStorage.getItem("joviclass:perfil") || "{}");
-            return perfil.nome?.trim().split(" ")[0] || "Helena";
-        } catch {
-            return "Helena";
-        }
-    });
+    const { perfil } = usePerfil();
+    const nomeUsuario = perfil.nome.trim().split(" ")[0] || "visitante";
 
     const [provas] = useState(() => {
         try {
@@ -167,7 +162,6 @@ const Home = () => {
                     </Link>
                 </div>
             </section>
-
         </main>
     );
 };

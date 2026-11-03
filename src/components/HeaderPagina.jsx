@@ -3,6 +3,15 @@ import { Link, useLocation } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
 import logo from "../assets/logo.png";
 
+function tempoRelativo(iso) {
+    const minutos = Math.round((Date.now() - new Date(iso).getTime()) / 60000);
+    if (minutos < 1) return "agora";
+    if (minutos < 60) return `há ${minutos} min`;
+    const horas = Math.round(minutos / 60);
+    if (horas < 24) return `há ${horas} h`;
+    return `há ${Math.round(horas / 24)} d`;
+}
+
 const HeaderPagina = ({ notificacoes, marcarTodasComoLidas }) => {
     const [menuAberto, setMenuAberto] = useState(false);
     const [notifAberto, setNotifAberto] = useState(false);
@@ -15,11 +24,9 @@ const HeaderPagina = ({ notificacoes, marcarTodasComoLidas }) => {
             ? "bg-[linear-gradient(135deg,var(--bg-color4),#4da3ff)] shadow-[0_6px_18px_rgba(20,102,255,0.4)]"
             : "bg-[var(--bg-color3)]"
         }`;
-    
-    const { logout } = useAuth();
 
     return (
-        <header className="relative  sticky top-0 z-30 flex flex-col bg-[linear-gradient(135deg,var(--grad-inicio)_0%,var(--grad-fim)_100%)] px-5 py-[18px] text-white shadow-[0_4px_20px_rgba(0,0,0,0.15)] min-[900px]:max-h-screen min-[900px]:min-h-screen min-[900px]:w-[280px] min-[900px]:shrink-0 min-[900px]:self-start min-[900px]:overflow-y-auto min-[900px]:px-[22px] min-[900px]:py-[30px]">
+        <header className="relative sticky top-0 z-30 flex flex-col bg-[linear-gradient(135deg,var(--grad-inicio)_0%,var(--grad-fim)_100%)] px-5 py-[18px] text-white shadow-[0_4px_20px_rgba(0,0,0,0.15)] min-[900px]:max-h-screen min-[900px]:min-h-screen min-[900px]:w-[280px] min-[900px]:shrink-0 min-[900px]:self-start min-[900px]:overflow-y-auto min-[900px]:px-[22px] min-[900px]:py-[30px]">
             <div className="flex items-center justify-between min-[900px]:flex-col min-[900px]:gap-[14px]">
                 <div className="flex items-center gap-3 min-[900px]:flex-col">
                     <img
@@ -76,7 +83,8 @@ const HeaderPagina = ({ notificacoes, marcarTodasComoLidas }) => {
                         {notifAberto && (
                             <div
                                 id="notifPanel"
-                                className="z-[60] overflow-hidden rounded-2xl bg-white text-[#12142b] shadow-[var(--sombra-forte)] max-[899px]:fixed max-[899px]:left-3 max-[899px]:right-3 max-[899px]:top-[84px] min-[900px]:absolute min-[900px]:left-1/2 min-[900px]:top-[calc(100%+12px)] min-[900px]:w-[252px] min-[900px]:-translate-x-1/2"                            >
+                                className="z-[60] overflow-hidden rounded-2xl bg-white text-[#12142b] shadow-[var(--sombra-forte)] max-[899px]:fixed max-[899px]:left-3 max-[899px]:right-3 max-[899px]:top-[84px] min-[900px]:absolute min-[900px]:left-1/2 min-[900px]:top-[calc(100%+12px)] min-[900px]:w-[252px] min-[900px]:-translate-x-1/2"
+                            >
                                 <div className="flex items-center justify-between gap-2 border-b border-[#eef0f5] px-4 py-[14px]">
                                     <strong className="text-sm">Notificações</strong>
                                     <button
@@ -101,9 +109,19 @@ const HeaderPagina = ({ notificacoes, marcarTodasComoLidas }) => {
                                                 className={`cursor-pointer border-b border-[#f5f5fa] px-4 py-3 last:border-b-0 ${!n.lida ? "bg-[#f6f7ff]" : "bg-white"
                                                     }`}
                                             >
-                                                <span className="text-[13px] text-[#12142b]">
-                                                    {n.texto}
-                                                </span>
+                                                <p className="text-[13px] font-bold text-[#12142b]">
+                                                    {n.titulo ?? n.texto}
+                                                </p>
+                                                {n.mensagem && (
+                                                    <p className="mt-0.5 text-[12px] text-[var(--bg-color5)]">
+                                                        {n.mensagem}
+                                                    </p>
+                                                )}
+                                                {n.data && (
+                                                    <p className="mt-1 text-[11px] font-bold text-[var(--bg-color1)]">
+                                                        {tempoRelativo(n.data)}
+                                                    </p>
+                                                )}
                                             </div>
                                         ))
                                     )}
@@ -176,7 +194,7 @@ const HeaderPagina = ({ notificacoes, marcarTodasComoLidas }) => {
                     className={linkClass("/camera")}
                     onClick={() => setMenuAberto(false)}
                 >
-                    Voltar a câmera 
+                    Voltar a câmera
                 </Link>
 
                 <Link
@@ -187,13 +205,6 @@ const HeaderPagina = ({ notificacoes, marcarTodasComoLidas }) => {
                     Sobre
                 </Link>
 
-                <Link
-                    to="/login"
-                    className={linkClass("/login")}
-                    onClick={logout}
-                >
-                    Sair
-                </Link>
             </nav>
         </header>
     );

@@ -1,30 +1,31 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
 import avatarPadrao from "../assets/avatar.png";
 import CardPerfil from "../components/CardPerfil";
-import { useToast } from "../hooks/useToast"
+import Toast from "../components/Toast";
+import { useToast } from "../hooks/useToast";
 import useAuth from "../hooks/useAuth";
-
-const CHAVE_PERFIL = "joviclass:perfil";
-
-function lerPerfil() {
-  try {
-    return JSON.parse(localStorage.getItem(CHAVE_PERFIL)) || {};
-  } catch {
-    return {};
-  }
-}
+import usePerfil from "../hooks/usePerfil";
+import useLocalStorage from "../hooks/useLocalStorage";
 
 const Perfil = () => {
-  const { mostrarToast, ToastEl } = useToast();
+  const { toast, mostrarToast } = useToast();
+  const { logout } = useAuth();
+  const { perfil, salvarPerfil } = usePerfil();
 
-  const [nome, setNome] = useState(() => lerPerfil().nome ?? "Helena Martins");
-  const [curso, setCurso] = useState(() => lerPerfil().curso ?? "Economia · 4º período");
-  const [email, setEmail] = useState(() => lerPerfil().email ?? "helena.martins@email.com");
+  const [materias] = useLocalStorage("materias", []);
+  const [tarefas] = useLocalStorage("joviclass:tarefas", []);
+  const tarefasFeitas = tarefas.filter((t) => t.concluida).length;
+
+  const [nome, setNome] = useState(perfil.nome);
+  const [curso, setCurso] = useState(perfil.curso);
+  const [email, setEmail] = useState(perfil.email);
   const [foto, setFoto] = useState(avatarPadrao);
   const [modalAberto, setModalAberto] = useState(false);
 
   const abrirModal = () => {
+    setNome(perfil.nome);
+    setCurso(perfil.curso);
+    setEmail(perfil.email);
     setModalAberto(true);
   };
 
@@ -32,13 +33,12 @@ const Perfil = () => {
     setModalAberto(false);
   };
 
-  const salvarPerfil = (event) => {
+  const salvar = (event) => {
     event.preventDefault();
-    localStorage.setItem(CHAVE_PERFIL, JSON.stringify({ nome, curso, email }));
+    salvarPerfil({ nome: nome.trim(), curso: curso.trim(), email: email.trim() });
     setModalAberto(false);
+    mostrarToast("✅ Perfil atualizado!");
   };
-
-  const { logout } = useAuth();
 
   return (
     <>
@@ -53,9 +53,9 @@ const Perfil = () => {
         </div>
 
         <CardPerfil
-          nome={nome}
-          curso={curso}
-          email={email}
+          nome={perfil.nome || "Visitante"}
+          curso={perfil.curso || "Curso não informado"}
+          email={perfil.email}
           foto={foto}
           mudarFoto={setFoto}
           editarPerfil={abrirModal}
@@ -73,7 +73,7 @@ const Perfil = () => {
               Matérias
             </span>
             <p className="mt-1.5 text-[1.7rem] font-extrabold text-[var(--bg-color1)]">
-              6
+              {materias.length}
             </p>
           </div>
 
@@ -82,7 +82,7 @@ const Perfil = () => {
               Tarefas feitas
             </span>
             <p className="mt-1.5 text-[1.7rem] font-extrabold text-[var(--bg-color1)]">
-              48
+              {tarefasFeitas}
             </p>
           </div>
         </div>
@@ -96,7 +96,7 @@ const Perfil = () => {
         </button>
       </main>
 
-      {ToastEl}
+      <Toast toast={toast} />
 
       {modalAberto && (
         <div
@@ -111,7 +111,7 @@ const Perfil = () => {
               Editar perfil
             </h3>
 
-            <form onSubmit={salvarPerfil}>
+            <form onSubmit={salvar}>
               <div className="mb-[14px] flex flex-col gap-1.5">
                 <label
                   htmlFor="campoNome"
@@ -140,6 +140,7 @@ const Perfil = () => {
                   className="rounded-[10px] border border-[#e2e4f0] bg-[#fafafe] px-3 py-[11px] font-[inherit] text-sm text-[#12142b] focus:border-[var(--bg-color1)] focus:bg-white focus:outline-none focus:shadow-[0_0_0_3px_rgba(0,15,176,0.12)]"
                   type="text"
                   id="campoCurso"
+                  placeholder="Ex.: Engenharia de Software · 1º ano"
                   value={curso}
                   onChange={(event) => setCurso(event.target.value)}
                 />
@@ -182,7 +183,6 @@ const Perfil = () => {
           </div>
         </div>
       )}
-
     </>
   );
 };
