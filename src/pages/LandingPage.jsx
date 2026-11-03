@@ -83,7 +83,6 @@ const EQUIPE = [
   { nome: "Paloma Dantas", foto: paloma, cargo: "Técnica de Informática e Estudante de Engenharia de Software" },
 ];
 
-// Classes repetidas em várias seções (Tailwind precisa ver as strings completas)
 const container = "mx-auto w-[min(600px,92%)] md:w-[min(1120px,90%)]";
 const secao = "scroll-mt-20 py-20 min-[900px]:py-[110px]";
 const tituloBloco = "mx-auto mb-[55px] max-w-[700px] text-center";
@@ -120,7 +119,6 @@ export default function LandingPage({ rotaApp = "/home" }) {
         precedence="default"
       />
 
-      {/* ===== Cabeçalho ===== */}
       <header className="sticky top-0 z-[1000] border-b-[5px] border-[#0031d1] bg-white/95">
         <nav className={`${container} relative flex min-h-[65px] items-center justify-between min-[381px]:min-h-[75px]`}>
           <a href="#inicio" className={logoLink} onClick={irPara("inicio")}>
@@ -166,7 +164,6 @@ export default function LandingPage({ rotaApp = "/home" }) {
       </header>
 
       <main>
-        {/* ===== Banner ===== */}
         <section
           id="inicio"
           className="grid min-h-[650px] scroll-mt-20 items-center [background:radial-gradient(circle_at_80%_20%,#dbe9ff_0%,transparent_35%),linear-gradient(135deg,#f7faff,#ffffff)]"
@@ -195,7 +192,6 @@ export default function LandingPage({ rotaApp = "/home" }) {
           </div>
         </section>
 
-        {/* ===== Solução ===== */}
         <section id="solucao" className={`${secao} bg-white`}>
           <div className={container}>
             <div className={tituloBloco}>
@@ -217,7 +213,6 @@ export default function LandingPage({ rotaApp = "/home" }) {
           </div>
         </section>
 
-        {/* ===== Funcionalidades ===== */}
         <section id="funcionalidades" className="scroll-mt-20 bg-[#f3f7ff]">
           <div className={`${container} grid items-center gap-10 pb-[50px] pt-[60px] text-center min-[900px]:grid-cols-[0.8fr_1.2fr] min-[900px]:pt-[90px] min-[900px]:text-left lg:gap-20`}>
             <div className="flex justify-center">
@@ -255,7 +250,6 @@ export default function LandingPage({ rotaApp = "/home" }) {
           </div>
         </section>
 
-        {/* ===== Público-alvo ===== */}
         <section id="publico" className={`${secao} bg-white`}>
           <div className={container}>
             <div className={tituloBloco}>
@@ -312,7 +306,6 @@ export default function LandingPage({ rotaApp = "/home" }) {
           </div>
         </section>
 
-        {/* ===== Projeto na prática ===== */}
         <section id="projeto" className={`${secao} bg-white`}>
           <div className={container}>
             <div className={tituloBloco}>
@@ -345,7 +338,6 @@ export default function LandingPage({ rotaApp = "/home" }) {
           </div>
         </section>
 
-        {/* ===== Equipe ===== */}
         <section id="equipe" className={`${secao} bg-[#f3f7ff]`}>
           <div className={container}>
             <div className={tituloBloco}>
@@ -374,7 +366,6 @@ export default function LandingPage({ rotaApp = "/home" }) {
           </div>
         </section>
 
-        {/* ===== Contato ===== */}
         <section id="contato" className={`${secao} bg-[#071a35] text-white`}>
           <div className={`${container} grid items-center gap-10 text-center min-[900px]:grid-cols-2 min-[900px]:gap-20 min-[900px]:text-left`}>
             <div>
@@ -410,7 +401,6 @@ export default function LandingPage({ rotaApp = "/home" }) {
         </section>
       </main>
 
-      {/* ===== Rodapé ===== */}
       <footer className="bg-[#041226] pt-[50px] text-white">
         <div className={`${container} flex flex-col flex-wrap items-center gap-[30px] pb-[30px] text-center md:flex-row md:items-start md:justify-between md:text-left`}>
           <div>

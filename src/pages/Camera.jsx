@@ -6,8 +6,6 @@ import CameraZoom from "../components/CameraZoom";
 import CameraControls from "../components/CameraControls";
 import CameraOverlay from "../components/CameraOverlay";
 
-// Gera uma foto colorida (JPEG) do quadro atual do vídeo, limitada a 1280px
-// para não estourar o limite do localStorage.
 function capturarFoto(video) {
   const largura = video.videoWidth || 640;
   const altura = video.videoHeight || 480;
@@ -28,7 +26,6 @@ const Camera = () => {
   const [resultado, setResultado] = useState("");
   const [processando, setProcessando] = useState(false);
   const [dropdownAberto, setDropdownAberto] = useState(false);
-  // Agora guarda a matéria escolhida (objeto {id, nome, ...}) em vez de true/false
   const [materiaSelecionada, setMateriaSelecionada] = useState(null);
   const [fotoCapturada, setFotoCapturada] = useState(null);
   const [overlayAberto, setOverlayAberto] = useState(false);
@@ -74,7 +71,6 @@ const Camera = () => {
     const canvas = canvasRef.current;
     const context = canvas.getContext("2d");
 
-    // Foto colorida que será salva na matéria (o canvas abaixo é só para o OCR)
     setFotoCapturada(capturarFoto(video));
 
     canvas.width = video.videoWidth || 640;
@@ -117,9 +113,6 @@ const Camera = () => {
     setOverlayAberto(false);
   };
 
-  // Grava a foto na lista da matéria, no mesmo formato que PaginaMateria lê
-  // (chave `materia:<id>:itens`). Lê o localStorage na hora para não sobrescrever
-  // itens que já existem.
   const salvarFoto = (nome) => {
     if (!materiaSelecionada || !fotoCapturada) {
       return false;

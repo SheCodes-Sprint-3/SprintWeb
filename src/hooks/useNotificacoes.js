@@ -3,7 +3,7 @@ import useLocalStorage from "./useLocalStorage";
 const agora = Date.now();
 const minutosAtras = (min) => new Date(agora - min * 60 * 1000).toISOString();
 
-// Notificações fictícias: só entram no localStorage na primeira vez
+// Notificações fictícias
 const NOTIFICACOES_INICIAIS = [
   {
     id: 1,
@@ -40,7 +40,6 @@ export default function useNotificacoes() {
     setNotificacoes((atuais) => atuais.map((n) => ({ ...n, lida: true })));
   }
 
-  // carregando e erro continuam no retorno para não quebrar quem já os usa
   return {
     notificacoes,
     naoLidas,

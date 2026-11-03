@@ -30,12 +30,10 @@ const PaginaMateria = () => {
   const { id } = useParams();
   const { toast, mostrarToast } = useToast();
 
-  // Nome da matéria, lido da lista salva pela página de Matérias
   const [materias] = useLocalStorage("materias", []);
   const nomeMateria =
     materias.find((m) => String(m.id) === String(id))?.nome || "Matéria";
 
-  // Itens (anotações e arquivos) desta matéria
   const [itens, setItens] = useLocalStorage(`materia:${id}:itens`, []);
 
   const [busca, setBusca] = useState("");

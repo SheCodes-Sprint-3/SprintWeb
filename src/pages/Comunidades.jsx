@@ -442,7 +442,6 @@ const Comunidades = () => {
               )}
             </section>
 
-            {/* Salas */}
             {!sala && (
               <div className="mt-5">
                 <p className="mb-4 text-xl font-bold text-[#222]">Salas</p>
@@ -469,7 +468,6 @@ const Comunidades = () => {
               </div>
             )}
 
-            {/* Sala interna */}
             {sala && (
               <div className="mt-2.5">
                 <div className="mb-6 mt-5 flex items-center gap-3.5">
@@ -509,7 +507,6 @@ const Comunidades = () => {
         )}
       </main>
 
-      {/* ============ MENU DE OPÇÕES ============ */}
       {menu && menuCom && (
         <>
           <div className="fixed inset-0 z-[1099]" onClick={() => setMenu(null)} />
